@@ -2,18 +2,19 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 
+from os.path import basename
+
 def load_file():
     global open_file
     file_path = askopenfilename()
 
     try:
-        with open(file_path, 'r') as file:
-        #with open(path+filename, 'r') as file:    
+        with open(file_path, 'r') as file:   
             data = file.read()
             file_text.delete('1.0', END)
             file_text.insert(END, data)
             open_file = file_path
-            root.title(file_path)
+            root.title(basename(file_path))
     except FileNotFoundError:
         return
     
@@ -35,11 +36,11 @@ def save_file():
     global open_file
     try:
         if(open_file == ""):
-            open_file = asksaveasfilename()
+            open_file = asksaveasfilename(defaultextension=".txt", filetypes=(("All Files", "*.*"), ("Text file", "*.txt")))
         with open(open_file, 'w') as file:
             file.write(INPUT)
             file.close()
-        root.title(open_file)
+        root.title(basename(open_file))
         return True
     except FileNotFoundError:
         return False
@@ -51,7 +52,6 @@ if __name__=="__main__":
     root = Tk()
     root.geometry("500x500")
     root.title("unknown file")
-    path = "./Text Editor/"
     open_file = ""
 
     file_text = Text(root, width = 50)
