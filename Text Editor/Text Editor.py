@@ -50,12 +50,12 @@ def save_file():
 
 if __name__=="__main__":
     root = Tk()
-    root.geometry("500x500")
+    root.geometry("800x400")
     root.title("unknown file")
     open_file = ""
 
     file_text = Text(root, width = 50)
-    file_text.configure(font = ("Arial", 20, ""))
+    file_text.configure(font = ("Courier New", 12, ""))
 
     menubar = Menu(root)
     filemenu = Menu(menubar, tearoff=0)
