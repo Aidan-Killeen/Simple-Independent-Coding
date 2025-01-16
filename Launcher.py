@@ -8,7 +8,7 @@ def list_subfolders(dir: str) -> List[str]:
     folder_names = []
     for entry_name in os.listdir(dir):
         entry_path = os.path.join(dir, entry_name)
-        if os.path.isdir(entry_path) and entry_name != ".git":
+        if os.path.isdir(entry_path) and entry_name != ".git" and entry_name != "WIP":
             folder_names.append(entry_name)
     return folder_names
 
@@ -22,16 +22,20 @@ def menu(folder_names: List[str]) -> int:
         if selection.isdigit() and int(selection) in range(1, len(folder_names)+1):
             index = int(selection) - 1
             break
+        elif selection.lower() == "exit":
+            print("Exiting program...")
+            index = -1
+            break
         else:
-            print("Invalid Input: Enter a number from 1 to", len(folder_names))
+            print("Invalid Input: Enter a number from 1 to", len(folder_names), "or type 'exit'")
     return index
 
 if __name__=="__main__":
     folder_names = list_subfolders(".")
     index = menu(folder_names)
-        
-    file = folder_names[index]
-    path = "./" + file + "/" + file + ".py"
-    print("Running", file)
-    subprocess.Popen(["python", path])
+    if index >= 0:   
+        file = folder_names[index]
+        path = "./" + file + "/" + file + ".py"
+        print("Running", file)
+        subprocess.Popen(["python", path])
     print("End")
