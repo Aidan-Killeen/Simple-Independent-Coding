@@ -4,6 +4,8 @@ from tkinter import Button
 from tkinter import TclError
 import re
 
+root = Tk()
+
 def paste():
     try:
         return root.clipboard_get()
@@ -27,10 +29,10 @@ def pdf_edit():
     print(current_clip)
 
 if __name__=="__main__":
-    root = Tk()
+    #root = Tk()
     #root.withdraw()
     root.geometry("500x500")
-    root.title("Simple Calculator")
+    root.title("Clipboard")
     
 
     b1 = Button(root, text = "Edit", command = pdf_edit, 

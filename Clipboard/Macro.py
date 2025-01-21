@@ -1,19 +1,32 @@
 import tkinter
-#import keyboard
-#import pynput
+from pynput.keyboard import Key, Controller, Listener
+import subprocess
+from Clipboard import pdf_edit
 
-root = tkinter.Tk()
+def on_press(key):
+    print('{} pressed'.format(key))
+    #print(dir(key))
 
-def key_handler(event):
-    print(event.char, event.keysym, event.keycode)
-    #handler = event.char
-    handler = event.char
-    if handler == 'q':
-        root.quit()
+    if key == Key.insert:
+        subprocess.Popen(["python", "./Clipboard/Clipboard.py"])
+        #pdf_edit()
 
-root.bind("<Key>", key_handler)
+    
+def on_release(key):
+    print('{} release'.format(key))
 
-#keyboard.on_press(key_handler)
-#pynput
+    if key == Key.esc:
+        # Stop listener
+        return False
+0
+# --- main ---
 
-root.mainloop()
+keyboard = Controller()
+
+listener = Listener(on_press=on_press, on_release=on_release)
+
+listener.start()
+
+# ... other code ...
+
+listener.join()

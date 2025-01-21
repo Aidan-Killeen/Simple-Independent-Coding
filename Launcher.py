@@ -8,7 +8,7 @@ def list_subfolders(dir: str) -> List[str]:
     folder_names = []
     for entry_name in os.listdir(dir):
         entry_path = os.path.join(dir, entry_name)
-        if os.path.isdir(entry_path) and entry_name != ".git" and entry_name != "WIP":
+        if os.path.isdir(entry_path) and entry_name[0] != "." and entry_name != "WIP":
             folder_names.append(entry_name)
     return folder_names
 
