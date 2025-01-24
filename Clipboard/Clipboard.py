@@ -6,28 +6,21 @@ import re
 from pynput.keyboard import Key, Controller, Listener
 
 def pdf_edit():
+    #Adjusts copied text
     current_clip = pyperclip.paste()
-    current_clip = adjust(current_clip)
-    pyperclip.copy(current_clip)
-
-    print(current_clip)
-
-
-def adjust(txt):
-    output = re.sub(r"([^.])\n",r"\1 ", txt) #losing char
-    return output
-
-
-
+    output = re.sub(r"([^\\.])\r\n", r"\1 ", current_clip)
+    pyperclip.copy(output)
 
 
 changing_shortcut = False
 listening = False
 top = None
 def change():
-    #Needs to create a popup
+    #Changes mode of get_shortcut function
     global changing_shortcut
     changing_shortcut = True
+
+    #Creates a Popup
     global top
     top = Toplevel(root)
     top.geometry("300x100")
@@ -36,20 +29,22 @@ def change():
 
     top.columnconfigure(0, weight=1)
     top.rowconfigure(0, weight=1)
-    #top = messagebox.showinfo(title="Select Key")
-    #top = Dialog(root, title="Select Key")
 
 def get_shortcut(key):
     global changing_shortcut
     global shortcut
+    #If swapping what hotkey is being used
     if changing_shortcut:
         shortcut = key
         short_disp.delete(0, "end")
         short_disp.insert( len(short_disp.get()), '{}'.format(shortcut))
         changing_shortcut = False
+
+        #Deleting popup
         global top
         if top != None:
             top.destroy()
+    #If operating as a macro
     elif listening:
         print('{} pressed'.format(key))
         if key == shortcut:
@@ -57,9 +52,8 @@ def get_shortcut(key):
         elif key == Key.esc:
             return False
 
-
-
 def macro():
+    #Removes the window, changes get_shortcut into macro mode
     root.destroy()
     global listening
     listening = True
