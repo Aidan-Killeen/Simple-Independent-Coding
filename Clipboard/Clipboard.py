@@ -1,5 +1,4 @@
 from tkinter import Tk, Button, Entry, Label, Toplevel, messagebox
-from tkinter.simpledialog import Dialog
 import pyperclip
 
 import re
@@ -50,11 +49,13 @@ def get_shortcut(key):
         if key == shortcut:
             pdf_edit()
         elif key == Key.esc:
+            print("Shutting Down...")
             return False
 
 def macro():
     #Removes the window, changes get_shortcut into macro mode
     root.destroy()
+    print("Launching Macro")
     global listening
     listening = True
     
@@ -62,6 +63,7 @@ def on_closing():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         root.destroy()
         listener.stop()
+        print("Shutting Down...")
 
 shortcut = Key.insert
 
@@ -90,5 +92,4 @@ if __name__=="__main__":
 
     root.protocol("WM_DELETE_WINDOW", on_closing)
     root.mainloop()
-    print("Macro launched")
     listener.join()
