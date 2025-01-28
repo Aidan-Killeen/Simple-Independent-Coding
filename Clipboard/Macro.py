@@ -27,11 +27,11 @@ class Macro:
     def get_shortcut(self, key):
         #If swapping what hotkey is being used
         if self.changing_shortcut:
-            self.shortcut = key
+            self.shortcuts[0] = key
                                                                             #Get which shortcut is changing
             display = self.displays[0]
             display.delete(0, "end")
-            display.insert( len(display.get()), '{}'.format(self.shortcut))
+            display.insert( len(display.get()), '{}'.format(self.shortcuts[0]))
             self.changing_shortcut = False
 
             #Deleting popup
@@ -40,7 +40,7 @@ class Macro:
         #If operating as a macro
         elif self.listening:
             print('{} pressed'.format(key))
-            if key == self.shortcut:                                                #get which keys this corresponds to
+            if key == self.shortcuts[0]:                                                #get which keys this corresponds to
                 self.commands[0]()                                                  #get which command is running
             elif key == Key.esc:
                 print("Shutting Down...")
