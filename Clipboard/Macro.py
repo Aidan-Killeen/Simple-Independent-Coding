@@ -1,14 +1,17 @@
 from tkinter import Tk, Button, Entry, Label, Toplevel, messagebox
 from pynput.keyboard import Key, Controller, Listener
 
+def test_macro():
+    print("Test")
 class Macro:   
     changing_shortcut = False
     listening = False
     top = None
-    command = None
-    shortcut = Key.insert
+    commands = None
+    displays = None
+    shortcuts = [Key.insert]
 
-    def change(self):
+    def change(self, i):
         #Changes mode of get_shortcut function
         self.changing_shortcut = True
 
@@ -25,8 +28,10 @@ class Macro:
         #If swapping what hotkey is being used
         if self.changing_shortcut:
             self.shortcut = key
-            self.short_disp.delete(0, "end")
-            self.short_disp.insert( len(self.short_disp.get()), '{}'.format(self.shortcut))
+                                                                            #Get which shortcut is changing
+            display = self.displays[0]
+            display.delete(0, "end")
+            display.insert( len(display.get()), '{}'.format(self.shortcut))
             self.changing_shortcut = False
 
             #Deleting popup
@@ -35,8 +40,8 @@ class Macro:
         #If operating as a macro
         elif self.listening:
             print('{} pressed'.format(key))
-            if key == self.shortcut:
-                self.command()
+            if key == self.shortcut:                                                #get which keys this corresponds to
+                self.commands[0]()                                                  #get which command is running
             elif key == Key.esc:
                 print("Shutting Down...")
                 return False
@@ -54,33 +59,43 @@ class Macro:
             print("Shutting Down...")
 
     
-    def __init__(self, macro_command):
-        #pass
+    def __init__(self, macro_command=test_macro, *additional_macros):
         self.keyboard = Controller()
         self.listener = Listener(on_press=self.get_shortcut)
         self.listener.start()
-        self.command = macro_command
+        self.commands = [macro_command] + list(additional_macros)
+
+        total_macros = 1 + len(additional_macros)
+        self.shortcuts = [Key.insert] * total_macros
+        self.displays = [None] * total_macros
 
         root = Tk()
         root.geometry("500x500")
         root.title("Clipboard")
-        
+        Label(root, text= "Macros").grid(column=1, row=0)
 
-        single_use = Button(root, text = "Single Edit", command = macro_command, 
-                        padx = 30, pady = 10)
-        single_use.grid(row=0, column = 0)
-        self.short_disp = Entry(root, width = 50)
-        self.short_disp.grid(row=1, column = 0)
-        self.short_disp.insert( len(self.short_disp.get()), '{}'.format(self.shortcut))
+        #Individual macro prep
+        for i in range(total_macros):
+            single_use = Button(root, text = "Test: " + macro_command.__name__, command = macro_command)
+            single_use.grid(row=i+1, column = 0)
 
-        change = Button(root, text="Change", command=self.change)
-        change.grid(row=1, column=1)
 
-        min = Button(root, text="Launch Macro", command=self.macro_start)
-        min.grid(row=2)
+            self.displays[i] = Entry(root, width = 50)
+            self.displays[i].grid(row=i+1, column = 1)
+            self.displays[i].insert( len(self.displays[i].get()), '{}'.format(self.shortcuts[0]))   #change this to var
+
+            change = Button(root, text="Change", command= lambda i = i: self.change(i))
+            change.grid(row=i+1, column=2)
+
+        launch = Button(root, text="Launch Macros", command=self.macro_start)
+        launch.grid(row=total_macros+1, column=1)
 
         root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.root = root
         self.root.mainloop()
         self.listener.join()
+
+
+if __name__=="__main__":
+    Macro()
