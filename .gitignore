@@ -2,3 +2,4 @@ notes.txt
 WIP/
 .venv/
 __pycache__/
+*.class
