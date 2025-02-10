@@ -9,8 +9,8 @@ import javax.swing.JPanel;
 
 public class Pong extends Canvas implements Runnable
 {
-    public static final int SCREEN_WIDTH = 400;    //Change this to be package visable only
-    public static final int SCREEN_HEIGHT = 400;
+    public static final int SCREEN_WIDTH = 800;    //Change this to be package visable only
+    public static final int SCREEN_HEIGHT = 800;
     public static final int MARGIN = 10;
 
     private Paddle player;
@@ -39,7 +39,7 @@ public class Pong extends Canvas implements Runnable
         //Ball
         if(launched)
             ball.update();
-        ball.draw();
+        ball.draw(g);
 
         //Paddle
         player.update();
@@ -91,7 +91,7 @@ public class Pong extends Canvas implements Runnable
 		this.setMinimumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
 
         //new game setup
-        ball = new Ball();
+        ball = new Ball(1);
         player = new Paddle(false);
         ai = new Paddle(true);
 
