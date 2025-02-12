@@ -20,7 +20,7 @@ public class Pong extends Canvas implements Runnable
     private Thread gameThread;
     private boolean running;
 
-    boolean launched = false;
+    Controls controls;
 
     private void draw() 
     {
@@ -37,7 +37,7 @@ public class Pong extends Canvas implements Runnable
         g.fillRect(0, 0, SCREEN_WIDTH , SCREEN_HEIGHT);
 
         //Ball
-        if(launched)
+        if(controls.launched)
             ball.update();
         ball.draw(g);
 
@@ -107,7 +107,8 @@ public class Pong extends Canvas implements Runnable
 		frame.setVisible(true);
 		
 		this.start();
-
+        controls = new Controls(player);
+        this.addKeyListener(controls);
         this.setFocusable(true);
 
     }

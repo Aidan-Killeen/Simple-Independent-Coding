@@ -3,7 +3,7 @@ import java.awt.Graphics;
 
 public class Ball 
 {
-    static final int radius = 8;
+    static final int RADIUS = 8;
     private int x, y;
     private int xDir, yDir;
     private int speed;
@@ -11,8 +11,8 @@ public class Ball
     private double speedRandMax = 2;
     private double speedRandMin = -2;
 
-    double yMax = Pong.SCREEN_HEIGHT - radius;
-    double yMin = radius;
+    double yMax = Pong.SCREEN_HEIGHT - RADIUS;
+    double yMin = RADIUS;
 
     Ball(int speed)
     {
@@ -34,11 +34,14 @@ public class Ball
     {
         x = x + xDir;
         y = y + yDir;
+
+        if (y <= yMin || y >= yMax)
+            yDir = -yDir;
     }
 
     public void draw(Graphics g)
     {
         g.setColor(Color.WHITE);
-        g.fillOval(x, y, radius, radius);
+        g.fillOval(x, y, RADIUS, RADIUS);
     }
 }
