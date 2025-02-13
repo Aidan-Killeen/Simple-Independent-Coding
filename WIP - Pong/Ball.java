@@ -30,8 +30,7 @@ public class Ball
         
         xSpeed = 2 * xDir;
         ySpeed = 2*speed*speedMultiplier*yDir;
-        System.out.println("" + xDir + ", " + yDir);
-        System.out.println("" + xSpeed + ", " + ySpeed);
+
         if(playerWon)
             speedMultiplier *=2;
     }
