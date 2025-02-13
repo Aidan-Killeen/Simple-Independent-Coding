@@ -51,6 +51,26 @@ public class Pong extends Canvas implements Runnable
         g.dispose();
         buffer.show();
 
+        checkIfScored();
+
+    }
+
+    public void checkIfScored()
+    {
+        if(ball.getX() < 0)
+        {
+            controls.launched = false;
+            ai.lostLife();
+            ball.reset(true);
+            //System.out.println("Player");
+        }
+        else if(ball.getX() > SCREEN_WIDTH)
+        {
+            controls.launched = false;
+            player.lostLife();
+            ball.reset(false);
+            //System.out.println("AI");
+        }
     }
     @Override
     public void run()

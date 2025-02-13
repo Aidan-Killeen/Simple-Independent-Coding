@@ -29,6 +29,11 @@ public class Paddle
 
     }
 
+    public void lostLife()
+    {
+        lives--;
+    }
+
     public void draw(Graphics g)
     {
         g.setColor(Color.WHITE);
