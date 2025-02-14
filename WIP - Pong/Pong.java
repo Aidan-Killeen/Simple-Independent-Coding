@@ -20,7 +20,7 @@ public class Pong extends Canvas implements Runnable
     private Thread gameThread;
     private boolean running;
 
-    Controls controls;
+    private Controls controls;
 
     private void draw() 
     {
@@ -42,16 +42,18 @@ public class Pong extends Canvas implements Runnable
         ball.draw(g);
 
         //Paddle
-        player.update();
+        player.update(ball);
         player.draw(g);
 
-        ai.update();
+        ai.update(ball);
         ai.draw(g);
 
         g.dispose();
         buffer.show();
 
         checkIfScored();
+        ball.collision(player);
+        ball.collision(ai);
 
     }
 
@@ -62,14 +64,12 @@ public class Pong extends Canvas implements Runnable
             controls.launched = false;
             ai.lostLife();
             ball.reset(true);
-            //System.out.println("Player");
         }
         else if(ball.getX() > SCREEN_WIDTH)
         {
             controls.launched = false;
             player.lostLife();
             ball.reset(false);
-            //System.out.println("AI");
         }
     }
     @Override

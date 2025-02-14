@@ -28,11 +28,29 @@ public class Ball
         int xDir = (Math.random() < .5)?(1):(-1);
         int yDir = (Math.random() < .5)?(1):(-1);
         
-        xSpeed = 2 * xDir;
-        ySpeed = 2*speed*speedMultiplier*yDir;
+        xSpeed = speed * xDir;
+        ySpeed = speed*speedMultiplier*yDir;
 
         if(playerWon)
             speedMultiplier *=2;
+    }
+
+    public void collision(Paddle player)
+    {
+        if(player.ai)
+        {
+            if(x-RADIUS <= player.getX() && player.inRange(y))
+            {
+                xSpeed = -xSpeed;
+            }
+        }
+        else
+        {
+            if(x+RADIUS >= player.getX() && player.inRange(y))
+            {
+                xSpeed = -xSpeed;
+            }
+        }
     }
 
     public void update()
@@ -53,6 +71,11 @@ public class Ball
     public int getX()
     {
         return x;
+    }
+
+    public int getY()
+    {
+        return y;
     }
         
 }
