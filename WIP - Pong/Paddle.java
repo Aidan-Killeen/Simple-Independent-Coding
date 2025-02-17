@@ -11,6 +11,7 @@ public class Paddle
 
     private int xPos;
     private int yPos;
+    private int base_speed = 2;
 
     public int lives = 3;
     public float paddleSpeed = 0;
@@ -27,13 +28,23 @@ public class Paddle
             xPos = Pong.SCREEN_WIDTH - Pong.MARGIN - PADDLE_WIDTH;
     }
 
-    public void update(Ball ball)
+    public void update(Ball ball, Controls controls)
     {
+        //AI Controls
         if(ai)
         {
             yPos = ball.getY() - PADDLE_HEIGHT/2;
         }
+        else
+        {
+            if(controls.up)
+                yPos -= base_speed;
+            if(controls.down)
+                yPos += base_speed;
+        }
 
+        //
+        //Keeping paddle in range
         if(yPos < 0)
         {
             yPos = 0;
@@ -43,6 +54,7 @@ public class Paddle
             yPos = Pong.SCREEN_HEIGHT - PADDLE_HEIGHT;
         }
     }
+
 
     public void lostLife()
     {

@@ -5,6 +5,8 @@ public class Controls extends KeyAdapter
 {
     Paddle player;
     boolean launched = false;
+    boolean up = false;
+    boolean down = false;
 
     Controls(Paddle player)
     {
@@ -20,5 +22,20 @@ public class Controls extends KeyAdapter
         {
             launched = true;
         }
+        if(key == KeyEvent.VK_W)
+            up = true;
+        else if(key == KeyEvent.VK_S)
+            down = true;
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e)
+    {
+        int key = e.getKeyCode();
+
+        if(key == KeyEvent.VK_W)
+            up = false;
+        else if(key == KeyEvent.VK_S)
+            down = false;
     }
 }
