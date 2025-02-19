@@ -68,9 +68,14 @@ public class Paddle
         g.fillRect(xPos, yPos, PADDLE_WIDTH, PADDLE_HEIGHT);
     }
 
-    public int getX()
+    public int getLeft()
     {
         return xPos;
+    }
+
+    public int getRight()
+    {
+        return xPos+PADDLE_WIDTH;
     }
 
     public boolean inRange(int y)

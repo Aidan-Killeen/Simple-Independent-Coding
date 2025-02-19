@@ -39,16 +39,16 @@ public class Ball
     {
         if(player.ai)
         {
-            if(x-RADIUS <= player.getX() && player.inRange(y))
+            if(x-RADIUS <= player.getRight() && x >= player.getLeft() && player.inRange(y))
             {
-                xSpeed = -xSpeed;
+                xSpeed = Math.abs(xSpeed);
             }
         }
         else
         {
-            if(x+RADIUS >= player.getX() && player.inRange(y))
+            if(x+RADIUS >= player.getLeft() && x <= player.getRight() && player.inRange(y))
             {
-                xSpeed = -xSpeed;
+                xSpeed = -Math.abs(xSpeed);
             }
         }
     }
