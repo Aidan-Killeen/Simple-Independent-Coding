@@ -9,7 +9,8 @@ def list_subfolders(dir: str) -> List[str]:
     for entry_name in os.listdir(dir):
         entry_path = os.path.join(dir, entry_name)
         if os.path.isdir(entry_path) and entry_name[0] != "." and "WIP" not in entry_name:
-            folder_names.append(entry_name)
+            if os.path.isfile("./" + entry_name + "/" + entry_name + ".py"):
+                folder_names.append(entry_name)
     return folder_names
 
 def menu(folder_names: List[str]) -> int:
