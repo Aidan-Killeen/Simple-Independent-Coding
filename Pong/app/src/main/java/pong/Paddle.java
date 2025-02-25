@@ -13,9 +13,10 @@ public class Paddle
     private int xPos;
     private int yPos;
     private int base_speed = 2;
+    public int paddleSpeed = 0;
 
     public int lives = 3;
-    public float paddleSpeed = 0;
+
 
     public boolean ai;
 
@@ -34,14 +35,43 @@ public class Paddle
         //AI Controls
         if(ai)
         {
-            yPos = ball.getY() - PADDLE_HEIGHT/2;
+            int yTarget = ball.getY() - PADDLE_HEIGHT/2;
+            int diff = yTarget-yPos;
+            //System.out.println(diff);
+            if(Math.abs(diff) <= base_speed)
+            {
+                yPos = yTarget;
+                paddleSpeed = diff;
+            }   
+            else if (diff < 0)
+            {
+                yPos -= base_speed;
+                paddleSpeed = -base_speed;
+            }  
+            else
+            {
+                yPos += base_speed;
+                paddleSpeed = base_speed;
+            }
+                
+            
+            //yPos = ball.getY() - PADDLE_HEIGHT/2;
         }
         else
         {
             if(controls.up)
+            {
                 yPos -= base_speed;
-            if(controls.down)
+                paddleSpeed = -base_speed;
+            }                
+            else if(controls.down)
+            {
                 yPos += base_speed;
+                paddleSpeed = base_speed;
+            }
+            else
+                paddleSpeed = 0;
+                
         }
 
         //

@@ -44,6 +44,7 @@ public class Ball
             if(x-RADIUS <= player.getRight() && x >= player.getLeft() && player.inRange(y))
             {
                 xSpeed = Math.abs(xSpeed);
+                ySpeed = ySpeed + player.paddleSpeed/2;
             }
         }
         else
@@ -51,6 +52,7 @@ public class Ball
             if(x+RADIUS >= player.getLeft() && x <= player.getRight() && player.inRange(y))
             {
                 xSpeed = -Math.abs(xSpeed);
+                ySpeed = ySpeed + player.paddleSpeed/2;
             }
         }
     }
