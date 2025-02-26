@@ -15,7 +15,10 @@ public class Paddle
     private int base_speed = 2;
     public int paddleSpeed = 0;
 
-    public int lives = 3;
+    private int lives = 3;
+    private int scoreMargin = 50;
+    private int fontSize = 30;
+    private final int scorePos;
 
 
     public boolean ai;
@@ -25,9 +28,16 @@ public class Paddle
         this.ai = ai;
         yPos = Pong.SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
         if(ai)
+        {
             xPos = Pong.MARGIN;
+            scorePos = scoreMargin;
+        }    
         else
+        {
             xPos = Pong.SCREEN_WIDTH - Pong.MARGIN - PADDLE_WIDTH;
+            scorePos = Pong.SCREEN_WIDTH-scoreMargin;       //width of text?
+        }
+            
     }
 
     public void update(Ball ball, Controls controls)
@@ -96,7 +106,13 @@ public class Paddle
     {
         g.setColor(Color.WHITE);
 
+        //paddle
         g.fillRect(xPos, yPos, PADDLE_WIDTH, PADDLE_HEIGHT);
+
+        //score
+        g.setFont(new Font("TimesRoman", Font.PLAIN, fontSize)); 
+        int offset = (ai)?(0):(-g.getFontMetrics().stringWidth(""+lives));
+        g.drawString(""+lives, scorePos+offset, scoreMargin+fontSize);
     }
 
     public int getLeft()
