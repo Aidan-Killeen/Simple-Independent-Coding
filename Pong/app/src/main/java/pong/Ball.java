@@ -6,8 +6,8 @@ import java.awt.Graphics;
 public class Ball 
 {
     static final int RADIUS = 8;
-    private int x, y;
-    private int xSpeed, ySpeed;
+    private double x, y;
+    private double xSpeed, ySpeed;
     private int speed;
 
     private int speedMultiplier = 1;
@@ -41,18 +41,18 @@ public class Ball
     {
         if(player.ai)
         {
-            if(x-RADIUS <= player.getRight() && x >= player.getLeft() && player.inRange(y))
+            if(x-RADIUS <= player.getRight() && x >= player.getLeft() && player.inRange((int)y))
             {
                 xSpeed = Math.abs(xSpeed);
-                ySpeed = ySpeed + player.paddleSpeed/2;
+                ySpeed = ySpeed + (double)player.paddleSpeed/10;
             }
         }
         else
         {
-            if(x+RADIUS >= player.getLeft() && x <= player.getRight() && player.inRange(y))
+            if(x+RADIUS >= player.getLeft() && x <= player.getRight() && player.inRange((int)y))
             {
                 xSpeed = -Math.abs(xSpeed);
-                ySpeed = ySpeed + player.paddleSpeed/2;
+                ySpeed = ySpeed + (double)player.paddleSpeed/10;
             }
         }
     }
@@ -69,17 +69,17 @@ public class Ball
     public void draw(Graphics g)
     {
         g.setColor(Color.WHITE);
-        g.fillOval(x, y, RADIUS, RADIUS);
+        g.fillOval((int)x, (int)y, RADIUS, RADIUS);
     }
 
     public int getX()
     {
-        return x;
+        return (int)x;
     }
 
     public int getY()
     {
-        return y;
+        return (int)y;
     }
         
 }

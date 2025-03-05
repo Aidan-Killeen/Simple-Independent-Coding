@@ -73,6 +73,16 @@ public class Pong extends Canvas implements Runnable
             player.lostLife();
             ball.reset(false);
         }
+        if(player.lostGame())
+        {
+            stop(); //change to quit option?
+
+        }
+        else if (ai.lostGame())
+        {
+            stop();
+
+        }
     }
     @Override
     public void run()
@@ -82,6 +92,7 @@ public class Pong extends Canvas implements Runnable
         {
             draw();
         }
+        draw();
     }
 
     public void start()

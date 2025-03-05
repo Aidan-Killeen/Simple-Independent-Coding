@@ -130,4 +130,9 @@ public class Paddle
         return y >= yPos && y <= yPos + PADDLE_HEIGHT;
     }
 
+    public boolean lostGame()
+    {
+        return lives <= 0;
+    }
+
 }
