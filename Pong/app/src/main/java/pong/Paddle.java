@@ -15,10 +15,10 @@ public class Paddle
     private int base_speed = 2;
     public int paddleSpeed = 0;
 
-    private int lives = 3;
+    private int lives;
     private int scoreMargin = 50;
     private int fontSize = 30;
-    private final int scorePos;
+    private int scorePos;
 
 
     public boolean ai;
@@ -26,6 +26,12 @@ public class Paddle
     Paddle(boolean ai)
     {
         this.ai = ai;
+        reset();
+            
+    }
+
+    public void reset()
+    {
         yPos = Pong.SCREEN_HEIGHT/2 - PADDLE_HEIGHT/2;
         if(ai)
         {
@@ -37,7 +43,7 @@ public class Paddle
             xPos = Pong.SCREEN_WIDTH - Pong.MARGIN - PADDLE_WIDTH;
             scorePos = Pong.SCREEN_WIDTH-scoreMargin;       //width of text?
         }
-            
+        lives = 3;
     }
 
     public void update(Ball ball, Controls controls)

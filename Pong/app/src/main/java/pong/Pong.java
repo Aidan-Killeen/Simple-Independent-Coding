@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Font;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ public class Pong extends Canvas implements Runnable
 
     private Thread gameThread;
     private boolean running;
+    public static boolean gameEnd;
 
     private Controls controls;
 
@@ -38,24 +40,46 @@ public class Pong extends Canvas implements Runnable
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH , SCREEN_HEIGHT);
 
-        //Ball
-        if(controls.launched)
-            ball.update();
-        ball.draw(g);
+        if(!gameEnd)
+        {
+            //Ball
+            if(controls.launched)
+                ball.update();
+            ball.draw(g);
 
-        //Paddle
-        player.update(ball, controls);
-        player.draw(g);
+            //Paddle
+            player.update(ball, controls);
+            player.draw(g);
 
-        ai.update(ball, controls);
-        ai.draw(g);
+            ai.update(ball, controls);
+            ai.draw(g);
 
+            checkIfScored();
+            ball.collision(player);
+            ball.collision(ai);
+        }
+        else
+        {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 80)); 
+            String outcome = "You Won!";
+            if(player.lostGame())
+            {
+                outcome = "You Lost.";
+            }
+            //Fontmetrics f = g.getFontMetrics();
+            int offsetX = g.getFontMetrics().stringWidth(outcome)/2;
+            //int offsetY = f.stringH
+            g.drawString(outcome, SCREEN_WIDTH/2-offsetX, SCREEN_HEIGHT/2);
+
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+            String newGame = "Press Enter to start a new game.";
+            offsetX = g.getFontMetrics().stringWidth(newGame)/2;
+            g.drawString(newGame, SCREEN_WIDTH/2-offsetX, SCREEN_HEIGHT/2+80);
+            //g.drawString(outcome, 0, 0);
+        }
         g.dispose();
         buffer.show();
-
-        checkIfScored();
-        ball.collision(player);
-        ball.collision(ai);
 
     }
 
@@ -73,17 +97,14 @@ public class Pong extends Canvas implements Runnable
             player.lostLife();
             ball.reset(false);
         }
-        if(player.lostGame())
+        if(player.lostGame() || ai.lostGame())
         {
-            stop(); //change to quit option?
-
+            gameEnd = true;
         }
-        else if (ai.lostGame())
-        {
-            stop();
+        
 
-        }
     }
+
     @Override
     public void run()
     {
@@ -101,6 +122,7 @@ public class Pong extends Canvas implements Runnable
         gameThread.start();
 
         running = true;
+        gameEnd = false;
     }
 
     private void stop()
@@ -140,7 +162,7 @@ public class Pong extends Canvas implements Runnable
 		frame.setVisible(true);
 		
 		this.start();
-        controls = new Controls(player);
+        controls = new Controls(player, ai);
         this.addKeyListener(controls);
         this.setFocusable(true);
 

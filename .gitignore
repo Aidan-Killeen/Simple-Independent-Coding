@@ -1,5 +1,6 @@
 notes.txt
 WIP/
 .venv/
+.vscode/
 __pycache__/
 *.class
