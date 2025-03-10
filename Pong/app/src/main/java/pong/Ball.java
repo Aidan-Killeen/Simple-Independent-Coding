@@ -6,9 +6,13 @@ import java.awt.Graphics;
 public class Ball 
 {
     static final int RADIUS = 8;
-    private double x, y;
-    private double xSpeed, ySpeed;
-    private int speed;
+
+    private double x;
+    private double y;
+
+    private double xSpeed;
+    private double ySpeed;
+    private final int speed;
 
     private int speedMultiplier = 1;
 
@@ -23,15 +27,15 @@ public class Ball
 
     public void reset(boolean playerWon)
     {
-        x = Pong.SCREEN_WIDTH/2;
-        y = Pong.SCREEN_HEIGHT/2;
+        x = (double)Pong.SCREEN_WIDTH/2;
+        y = (double)Pong.SCREEN_HEIGHT/2;
 
         //choose random xSpeed, xSpeed and ySpeed
         int xDir = (Math.random() < .5)?(1):(-1);
         int yDir = (Math.random() < .5)?(1):(-1);
         
-        xSpeed = speed * xDir;
-        ySpeed = speed*speedMultiplier*yDir;
+        xSpeed = (double)speed * xDir;
+        ySpeed = (double)speed*speedMultiplier*yDir;
 
         if(playerWon)
             speedMultiplier *=2;

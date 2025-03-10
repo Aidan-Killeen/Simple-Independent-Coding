@@ -3,12 +3,11 @@ package pong;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class Pong extends Canvas implements Runnable
 {
@@ -22,12 +21,13 @@ public class Pong extends Canvas implements Runnable
 
     private Thread gameThread;
     private boolean running;
-    public static boolean gameEnd;
+    private boolean gameEnd;
 
     private Controls controls;
 
     private void draw() 
     {
+        //creating screen
         BufferStrategy buffer = this.getBufferStrategy();
         if(buffer == null)
         {
@@ -40,26 +40,29 @@ public class Pong extends Canvas implements Runnable
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, SCREEN_WIDTH , SCREEN_HEIGHT);
 
+        //Draw Gameplay elements
         if(!gameEnd)
         {
             //Ball
             if(controls.launched)
                 ball.update();
             ball.draw(g);
+            checkIfScored();
 
-            //Paddle
+            //Player Paddle
             player.update(ball, controls);
             player.draw(g);
+            ball.collision(player);
 
+            //AI Paddle
             ai.update(ball, controls);
             ai.draw(g);
-
-            checkIfScored();
-            ball.collision(player);
             ball.collision(ai);
         }
+        //Game has ended
         else
         {
+            //Show Outcome of the game
             g.setColor(Color.WHITE);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 80)); 
             String outcome = "You Won!";
@@ -67,16 +70,16 @@ public class Pong extends Canvas implements Runnable
             {
                 outcome = "You Lost.";
             }
-            //Fontmetrics f = g.getFontMetrics();
+
             int offsetX = g.getFontMetrics().stringWidth(outcome)/2;
-            //int offsetY = f.stringH
             g.drawString(outcome, SCREEN_WIDTH/2-offsetX, SCREEN_HEIGHT/2);
 
+            //Instructions to Continue playing
             g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
             String newGame = "Press Enter to start a new game.";
             offsetX = g.getFontMetrics().stringWidth(newGame)/2;
             g.drawString(newGame, SCREEN_WIDTH/2-offsetX, SCREEN_HEIGHT/2+80);
-            //g.drawString(outcome, 0, 0);
+
         }
         g.dispose();
         buffer.show();
@@ -103,6 +106,16 @@ public class Pong extends Canvas implements Runnable
         }
         
 
+    }
+
+    public boolean getGameEnd()
+    {
+        return gameEnd;
+    }
+
+    public void setGameEnd(boolean end)
+    {
+        gameEnd = end;
     }
 
     @Override
@@ -169,10 +182,11 @@ public class Pong extends Canvas implements Runnable
     }
 
    
-
+    public static Pong p;
+    
     public static void main(String[] args)
     {
-        new Pong();
+        p = new Pong();
         //System.out.println("Working");
     }
 }

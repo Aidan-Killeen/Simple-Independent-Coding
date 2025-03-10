@@ -5,7 +5,8 @@ import java.awt.event.KeyEvent;
 
 public class Controls extends KeyAdapter
 {
-    Paddle player, ai;
+    Paddle player;
+    Paddle ai;
     boolean launched = false;
     boolean up = false;
     boolean down = false;
@@ -23,13 +24,13 @@ public class Controls extends KeyAdapter
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_ENTER)
         {
-            if(!Pong.gameEnd)
+            if(!Pong.p.getGameEnd())
                 launched = true;
             else
             {
                 player.reset();
                 ai.reset();
-                Pong.gameEnd = false;
+                Pong.p.setGameEnd(false);
             }
         }
         if(key == KeyEvent.VK_W)
