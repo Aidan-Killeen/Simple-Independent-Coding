@@ -2,6 +2,9 @@ import os
 from typing import List
 import subprocess
 
+from tkinter import Tk, messagebox
+from tkinter import Scrollbar, RIGHT, Y, Frame, BOTH, Canvas, LEFT
+
 #Finding Program names - each one is named after the directory it is in
 def list_subfolders(dir: str) -> List[str]:
     # dir = "."
@@ -31,12 +34,58 @@ def menu(folder_names: List[str]) -> int:
             print("Invalid Input: Enter a number from 1 to", len(folder_names), "or type 'exit'")
     return index
 
+class Launcher:
+    def on_closing(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self.root.destroy()
+            print("Shutting Down...") 
+    
+    def menu_ui(self):
+        root = Tk()
+        root.geometry("500x500")
+        root.title("Launcher")
+
+        # Making list of functions scrollable
+        win = Frame(root)
+        win.pack(fill=BOTH, expand=1)
+
+        canvas = Canvas(win)
+        canvas.pack(side=LEFT, fill=BOTH, expand=1)
+
+        scrollbar = Scrollbar(win, orient='vertical', command = canvas.yview)
+        scrollbar.pack(side = RIGHT, fill = Y)
+
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.bind(
+            '<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        sub_win = Frame(canvas)
+
+        #Add Buttons
+        # For Loop, function to link each filepath to buttons?
+
+        canvas.create_window((0, 0), window=sub_win, anchor="nw")
+
+        root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.root = root
+        self.root.mainloop()
+
+    
+    
+    def __init__(self, dir=".", text=True):
+        folder_names = list_subfolders(dir)
+        if(text):
+            index = menu(folder_names)
+            if index >= 0:   
+                file = folder_names[index]
+                path = dir + "/" + file + "/" + file + ".py"
+                print("Running", file)
+                subprocess.Popen(["python", path])
+                print("End")
+        else:
+            self.menu_ui()
+
 if __name__=="__main__":
-    folder_names = list_subfolders(".")
-    index = menu(folder_names)
-    if index >= 0:   
-        file = folder_names[index]
-        path = "./" + file + "/" + file + ".py"
-        print("Running", file)
-        subprocess.Popen(["python", path])
-    print("End")
+    Launcher()
+    #Launcher(text=False)
