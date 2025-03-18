@@ -2,7 +2,7 @@ import os
 from typing import List
 import subprocess
 
-from tkinter import Tk, messagebox
+from tkinter import Tk, messagebox, Button
 from tkinter import Scrollbar, RIGHT, Y, Frame, BOTH, Canvas, LEFT
 
 #Finding Program names - each one is named after the directory it is in
@@ -15,6 +15,12 @@ def list_subfolders(dir: str) -> List[str]:
             if os.path.isfile("./" + entry_name + "/" + entry_name + ".py"):
                 folder_names.append(entry_name)
     return folder_names
+
+def launch(dir: str, file: str):
+    path = dir + "/" + file + "/" + file + ".py"
+    print("Launching", file)
+    subprocess.Popen(["python", path])
+    print("End")
 
 def menu(folder_names: List[str]) -> int:
     index = 0
@@ -64,6 +70,9 @@ class Launcher:
 
         #Add Buttons
         # For Loop, function to link each filepath to buttons?
+        for i in range(len(self.files)):
+            single_use = Button(sub_win, text = self.files[i], command = lambda i = self.files[i]: launch(self.dir,i))
+            single_use.grid(row=i+1, column = 0)
 
         canvas.create_window((0, 0), window=sub_win, anchor="nw")
 
@@ -75,17 +84,17 @@ class Launcher:
     
     def __init__(self, dir=".", text=True):
         folder_names = list_subfolders(dir)
+        self.dir = dir
+        self.files = folder_names
         if(text):
             index = menu(folder_names)
             if index >= 0:   
                 file = folder_names[index]
-                path = dir + "/" + file + "/" + file + ".py"
-                print("Running", file)
-                subprocess.Popen(["python", path])
-                print("End")
+                launch(dir, file)
+
         else:
             self.menu_ui()
 
 if __name__=="__main__":
-    Launcher()
-    #Launcher(text=False)
+    #Launcher()
+    Launcher(text=False)
