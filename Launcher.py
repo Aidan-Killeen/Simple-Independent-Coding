@@ -2,7 +2,7 @@ import os
 from typing import List
 import subprocess
 
-from tkinter import Tk, messagebox, Button, Grid
+from tkinter import Tk, messagebox, Button, Grid, Text
 from tkinter import Scrollbar, RIGHT, Y, Frame, BOTH, Canvas, LEFT, TOP
 
 #Finding Program names - each one is named after the directory it is in
@@ -55,7 +55,7 @@ class Launcher:
         win = Frame(root)
         win.pack(fill=BOTH, expand=True)
 
-        canvas = Canvas(win, bg="blue")
+        canvas = Canvas(win, bg="skyblue")
         canvas.pack(side=LEFT, fill=BOTH, expand=True)
 
         scrollbar = Scrollbar(win, orient='vertical', command = canvas.yview)
@@ -69,29 +69,24 @@ class Launcher:
         
 
         c_width = canvas.winfo_reqwidth()
+        s_width = scrollbar.winfo_reqwidth()
+        print(c_width, s_width)
 
-        sub_win = Frame(canvas, width=c_width, background="red")
-        #Grid.columnconfigure(sub_win, 0, weight=1)
+        sub_win = Frame(canvas, background="skyblue")
 
         #Add Buttons
         # For Loop, function to link each filepath to buttons?
+
+
+        margin = 10
+        button_width = 50
         for i in range(len(self.files)):
-            single_use = Button(sub_win, width=50, height=5,
+            single_use = Button(sub_win, width=button_width, height=5,
                                 text = self.files[i], command = lambda i = self.files[i]: launch(self.dir,i))
-            single_use.grid(row=i+1, column = 0, padx=4, sticky="E")
-            #single_use.pack()
+            single_use.grid(row=i+1, column = 0, padx=margin, sticky="n")
 
 
-        canvas.create_window(0, 0, window=sub_win, anchor="center", tags="inner_frame")
-        #canvas.itemconfigure("inner_frame", width=c_width)
-
-        #def resize_widgets(event):
-        #    canvas.itemconfigure("inner_frame", width=event.width)
-
-        #canvas.bind("<Configure>", resize_widgets)
-        
-        
-        #canvas.itemconfig(sub_win, width=10)
+        frame_id = canvas.create_window(int((c_width+button_width)*.5) + margin + s_width, 0, window=sub_win, anchor="n", tags="inner_frame",)
 
         root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root = root
