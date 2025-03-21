@@ -45,13 +45,16 @@ class Launcher:
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()
             print("Shutting Down...") 
+    def _on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
     
     def menu_ui(self):
         root = Tk()
-        root.geometry("500x500")
+        window_size = 500
+        root.geometry(str(window_size) + "x" + str(window_size))
         root.title("Launcher")
 
-        # Making list of buttons scrollable
+        # Creating scrollable area for buttons
         win = Frame(root)
         win.pack(fill=BOTH, expand=True)
 
@@ -61,23 +64,14 @@ class Launcher:
         scrollbar = Scrollbar(win, orient='vertical', command = canvas.yview)
         scrollbar.pack(side = RIGHT, fill = Y)
 
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.bind(
-            '<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
 
         
 
-        c_width = canvas.winfo_reqwidth()
         s_width = scrollbar.winfo_reqwidth()
-        print(c_width, s_width)
 
         sub_win = Frame(canvas, background="skyblue")
 
         #Add Buttons
-        # For Loop, function to link each filepath to buttons?
-
-
         margin = 10
         button_width = 50
         for i in range(len(self.files)):
@@ -86,9 +80,34 @@ class Launcher:
             single_use.grid(row=i+1, column = 0, padx=margin, sticky="n")
 
 
-        frame_id = canvas.create_window(int((c_width+button_width)*.5) + margin + s_width, 0, window=sub_win, anchor="n", tags="inner_frame",)
+        frame_id = canvas.create_window(window_size//2-s_width//2, 0, window=sub_win, anchor="n", tags="inner_frame",)
 
         root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.update()
+        bbox = list(canvas.bbox("inner_frame"))
+        canvas_width = canvas.winfo_width()
+        canvas_heigth = canvas.winfo_height()
+        if bbox[2] < canvas_width:
+            bbox[2] = canvas_width
+        if bbox[3] < canvas_heigth:
+            bbox[3] = canvas_heigth
+        canvas.configure(scrollregion=(0, 0, bbox[2], bbox[3]))
+
+        bbox = tuple([0,0] + bbox[2:])
+        print(bbox)
+        canvas.bind(
+            '<Configure>', lambda e: canvas.configure(scrollregion=bbox)
+        )
+
+        canvas.bind_all(
+            "<MouseWheel>", self._on_mousewheel
+        )
+
+        self.canvas = canvas
+        
         self.root = root
         self.root.mainloop()
 
