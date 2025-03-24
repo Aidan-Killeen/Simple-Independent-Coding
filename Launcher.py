@@ -4,6 +4,8 @@ import subprocess
 
 from tkinter import Tk, messagebox, Button, Grid, Text
 from tkinter import Scrollbar, RIGHT, Y, Frame, BOTH, Canvas, LEFT, TOP
+from sys import executable
+
 
 #Finding Program names - each one is named after the directory it is in
 def list_subfolders(dir: str) -> List[str]:
@@ -18,8 +20,10 @@ def list_subfolders(dir: str) -> List[str]:
 
 def launch(dir: str, file: str):
     path = dir + "/" + file + "/" + file + ".py"
-    print("Launching", file)
-    subprocess.Popen(["python", path])
+    print("Launching", file, path)
+    
+    subprocess.Popen([executable, path])
+
     print("End")
 
 def menu(folder_names: List[str]) -> int:
@@ -97,7 +101,6 @@ class Launcher:
         canvas.configure(scrollregion=(0, 0, bbox[2], bbox[3]))
 
         bbox = tuple([0,0] + bbox[2:])
-        print(bbox)
         canvas.bind(
             '<Configure>', lambda e: canvas.configure(scrollregion=bbox)
         )
