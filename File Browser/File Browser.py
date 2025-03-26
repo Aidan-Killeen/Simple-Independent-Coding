@@ -3,8 +3,13 @@ from tkinter import *
 
 
 def browse():
-    file = askopenfilename(title="Select a File")
-    target_file_label.configure(text="File Opened: "+file)
+    run = True
+    while run:
+        file = askopenfilename(title="Select a File")
+        if file == "":
+            run = False
+        else:
+            target_file_label.configure(text="File Opened: "+file)
     #Need to open the file using system default
 
 if __name__=="__main__":
