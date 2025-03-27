@@ -1,6 +1,8 @@
 from tkinter.filedialog import askopenfilename
-from tkinter import *
-
+from tkinter import Tk
+from subprocess import call
+from os import startfile
+from platform import system
 
 def browse():
     run = True
@@ -8,8 +10,14 @@ def browse():
         file = askopenfilename(title="Select a File")
         if file == "":
             run = False
+            exit()
         else:
-            target_file_label.configure(text="File Opened: "+file)
+            if system() == 'Darwin':
+                call(('open', file))
+            elif system() == "Windows":
+                startfile(file)
+            else:
+                call(('xdg-open', file))
     #Need to open the file using system default
 
 if __name__=="__main__":
@@ -17,13 +25,9 @@ if __name__=="__main__":
     root.geometry("500x500")
     root.title('File Explorer')
 
-    target_file_label = Label(root, text="No Files chosen")
-    target_file_label.grid(column=1, row=1)
+    root.withdraw()
 
-    browse_button = Button(root, text="Browse Files", command=browse)
-    exit = Button(root, text = "Exit",command = exit)
-    browse_button.grid(column=1, row=2)
-    exit.grid(column=1, row=3)
+    browse()
 
     root.mainloop()
 
