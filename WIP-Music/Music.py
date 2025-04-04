@@ -1,4 +1,4 @@
-from tkinter import Tk, Button
+from tkinter import Tk, Button, Label, StringVar
 from tkinter.filedialog import askdirectory, askopenfilename
 from typing import List
 #import vlc as vlc
@@ -26,21 +26,24 @@ def launch(file: str):
     print("End")
 
 # ToDo
-# Menu UI
-#    Add a Label displaying current audio file name
 # Track playback
 #       Play/Pause buttons and functions
 #       Start audio from specific time - text box
 
 class MusicPlayer:
     file = ""
+    file_name = None
+    
     def changeDir(self):
         #temp = askdirectory()
         temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav")])
         if temp != "":
             self.file = temp
+            self.file_name.set("Currently playing: " + os.path.basename(temp))
             launch(self.file)
-        print(self.file)
+        else:
+            self.file_name.set("No file selected")
+            print(self.file)
 
         
 
@@ -49,9 +52,16 @@ class MusicPlayer:
         root.geometry("500x500")
         root.title('Music Player')
 
-        folder_but = Button(root, width=10, height=1, text = "Browse...", command = self.changeDir)
-        folder_but.grid(row=0, column = 0, padx=10, sticky="nw")
 
+        folder_but = Button(root, width=10, height=1, text = "Browse...", command = self.changeDir)
+        folder_but.grid(row=0, column = 1, padx=10, sticky="nw")
+
+
+        self.file_name = StringVar()
+        self.file_name.set("No file selected")
+        display_name = Label(root, textvariable=self.file_name)
+        display_name.grid(row=0, column = 0, padx=10, sticky="nw")
+        #self.display = display_name
         root.mainloop()
 
 if __name__=="__main__":
