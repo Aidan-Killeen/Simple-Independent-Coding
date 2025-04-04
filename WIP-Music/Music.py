@@ -36,7 +36,7 @@ class MusicPlayer:
     file = ""
     def changeDir(self):
         #temp = askdirectory()
-        temp = askopenfilename()
+        temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav")])
         if temp != "":
             self.file = temp
             launch(self.file)
