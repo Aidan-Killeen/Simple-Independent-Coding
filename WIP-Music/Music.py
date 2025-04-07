@@ -14,25 +14,18 @@ def list_mp3s(dir: str) -> List[str]:
             mp3s.append(entry_name)
     return mp3s
 
-def launch(file: str):
-    print("Playing", file)
-
-    mixer.init()
-    mixer.music.load(file)
-    mixer.music.play()
-
-
-
-    print("End")
 
 # ToDo
 # Track playback
-#       Play/Pause buttons and functions
+#       Error handling for before track is loaded
+#       Combine Play and pause buttons
 #       Start audio from specific time - text box
 
 class MusicPlayer:
     file = ""
     file_name = None
+    mixer.init()
+    paused = False
     
     def changeDir(self):
         #temp = askdirectory()
@@ -40,10 +33,24 @@ class MusicPlayer:
         if temp != "":
             self.file = temp
             self.file_name.set("Currently playing: " + os.path.basename(temp))
-            launch(self.file)
+            mixer.music.load(self.file)
+
         else:
             self.file_name.set("No file selected")
             print(self.file)
+
+    def play(self):
+        if(self.paused):
+            mixer.music.unpause()
+        else:
+            mixer.music.play()
+        self.paused = False
+        
+
+    def pause(self):
+        #if(mixer.music.get_busy()):
+        mixer.music.pause()
+        self.paused = True
 
         
 
@@ -62,6 +69,11 @@ class MusicPlayer:
         display_name = Label(root, textvariable=self.file_name)
         display_name.grid(row=0, column = 0, padx=10, sticky="nw")
         #self.display = display_name
+
+        play = Button(root, width=10, height=1, text = "Play", command = self.play)
+        play.grid(row=1, column = 0, padx=10, sticky="nw")
+        pause = Button(root, width=10, height=1, text = "Pause", command = self.pause)
+        pause.grid(row=1, column = 1, padx=10, sticky="nw")
         root.mainloop()
 
 if __name__=="__main__":
