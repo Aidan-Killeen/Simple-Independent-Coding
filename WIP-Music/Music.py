@@ -4,7 +4,7 @@ from typing import List
 #import vlc as vlc
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-from pygame import mixer
+from pygame import mixer, event, USEREVENT, init, quit
 
 def list_mp3s(dir: str) -> List[str]:
     mp3s = []
@@ -17,8 +17,7 @@ def list_mp3s(dir: str) -> List[str]:
 
 # ToDo
 # Track playback
-#       Error handling for before track is loaded
-#       Add reset for play button and booleans when track completes
+#       Stop button
 #       Start audio from specific time - text box
 
 class MusicPlayer:
@@ -28,6 +27,7 @@ class MusicPlayer:
     paused = False
     toggle = True
     mode = None
+    MUSIC_END = USEREVENT+1
     
     def changeDir(self):
         #temp = askdirectory()
@@ -41,29 +41,44 @@ class MusicPlayer:
             self.file_name.set("No file selected")
             print(self.file)
 
+    def check_end(self):
+        for e in event.get():
+            if e.type == self.MUSIC_END:
+                #print('music end event')
+                self.toggle = True
+                self.paused = False
+                self.mode.set("Play")
+
+        self.root.after(100, self.check_end)
+
     def play_pause(self):
-        if(self.toggle):
-            if(self.paused):
-                mixer.music.unpause()
+        if(self.file != ""):
+            if(self.toggle):
+                if(self.paused):
+                    mixer.music.unpause()
+                else:
+                    mixer.music.play()
+                self.paused = False
+                self.toggle = False
+                self.mode.set("Pause")
             else:
-                mixer.music.play()
-            self.paused = False
-            self.toggle = False
-            self.mode.set("Pause")
+                mixer.music.pause()
+                self.paused = True
+                self.toggle = True
+                self.mode.set("Play")
         else:
-            mixer.music.pause()
-            self.paused = True
-            self.toggle = True
-            self.mode.set("Play")
+            print("Error: No music loaded")
         
         
 
         
 
     def __init__(self):
+        init()
         root = Tk()
         root.geometry("500x500")
         root.title('Music Player')
+        mixer.music.set_endevent(self.MUSIC_END)
 
 
         folder_but = Button(root, width=10, height=1, text = "Browse...", command = self.changeDir)
@@ -82,7 +97,11 @@ class MusicPlayer:
         play.grid(row=1, column = 0, padx=10, sticky="nw")
         #pause = Button(root, width=10, height=1, text = "Pause", command = self.pause)
         #pause.grid(row=1, column = 1, padx=10, sticky="nw")
-        root.mainloop()
+        self.root = root
+
+        self.check_end()
+        self.root.mainloop()
+        quit()
 
 if __name__=="__main__":
     MusicPlayer()
