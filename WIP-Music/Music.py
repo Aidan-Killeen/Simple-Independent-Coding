@@ -17,7 +17,6 @@ def list_mp3s(dir: str) -> List[str]:
 
 # ToDo
 # Track playback
-#       Stop button
 #       Start audio from specific time - text box
 
 class MusicPlayer:
@@ -45,11 +44,14 @@ class MusicPlayer:
         for e in event.get():
             if e.type == self.MUSIC_END:
                 #print('music end event')
-                self.toggle = True
-                self.paused = False
-                self.mode.set("Play")
+                self.reset()
 
         self.root.after(100, self.check_end)
+    
+    def reset(self):
+        self.toggle = True
+        self.paused = False
+        self.mode.set("Play")
 
     def play_pause(self):
         if(self.file != ""):
@@ -68,9 +70,14 @@ class MusicPlayer:
                 self.mode.set("Play")
         else:
             print("Error: No music loaded")
-        
-        
 
+
+    def stop(self):
+        if(self.file != ""):
+            self.reset()
+            mixer.music.stop()
+        else:
+            print("Error: No music loaded")
         
 
     def __init__(self):
@@ -95,8 +102,8 @@ class MusicPlayer:
         self.mode.set("Play")
         play = Button(root, width=10, height=1, textvariable=self.mode, command = self.play_pause)
         play.grid(row=1, column = 0, padx=10, sticky="nw")
-        #pause = Button(root, width=10, height=1, text = "Pause", command = self.pause)
-        #pause.grid(row=1, column = 1, padx=10, sticky="nw")
+        stop = Button(root, width=10, height=1, text = "Stop", command = self.stop)
+        stop.grid(row=1, column = 1, padx=10, sticky="nw")
         self.root = root
 
         self.check_end()
