@@ -27,6 +27,7 @@ class MusicPlayer:
     toggle = True
     mode = None
     MUSIC_END = USEREVENT+1
+    time = None
     
     def changeDir(self):
         #temp = askdirectory()
@@ -46,12 +47,19 @@ class MusicPlayer:
                 #print('music end event')
                 self.reset()
 
+        milli = mixer.music.get_pos()
+        sec = int(milli/1000)
+        m = sec//60
+        sec = sec % 60
+        self.time.set("{:02}:{:02}".format(m, sec))
+
         self.root.after(100, self.check_end)
     
     def reset(self):
         self.toggle = True
         self.paused = False
         self.mode.set("Play")
+        self.time.set("0:00")
 
     def play_pause(self):
         if(self.file != ""):
@@ -105,6 +113,12 @@ class MusicPlayer:
         stop = Button(root, width=10, height=1, text = "Stop", command = self.stop)
         stop.grid(row=1, column = 1, padx=10, sticky="nw")
         self.root = root
+
+        self.time = StringVar()
+        self.time.set("0:00")
+        display_time =Label(root, textvariable=self.time)
+        display_time.grid(row=3, column = 0, padx=10, sticky="nw")
+
 
         self.check_end()
         self.root.mainloop()
