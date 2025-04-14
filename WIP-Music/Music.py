@@ -1,7 +1,6 @@
 from tkinter import Tk, Button, Label, StringVar
-from tkinter.filedialog import askdirectory, askopenfilename
+from tkinter.filedialog import askopenfilename
 from typing import List
-#import vlc as vlc
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 from pygame import mixer, event, USEREVENT, init, quit
@@ -29,8 +28,7 @@ class MusicPlayer:
     MUSIC_END = USEREVENT+1
     time = None
     
-    def changeDir(self):
-        #temp = askdirectory()
+    def get_audio(self):
         temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav")])
         if temp != "":
             self.file = temp
@@ -96,7 +94,7 @@ class MusicPlayer:
         mixer.music.set_endevent(self.MUSIC_END)
 
 
-        folder_but = Button(root, width=10, height=1, text = "Browse...", command = self.changeDir)
+        folder_but = Button(root, width=10, height=1, text = "Browse...", command = self.get_audio)
         folder_but.grid(row=0, column = 1, padx=10, sticky="nw")
 
 
@@ -104,7 +102,6 @@ class MusicPlayer:
         self.file_name.set("No file selected")
         display_name = Label(root, textvariable=self.file_name)
         display_name.grid(row=0, column = 0, padx=10, sticky="nw")
-        #self.display = display_name
 
         self.mode = StringVar()
         self.mode.set("Play")
