@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Label, StringVar
+from tkinter import Tk, Button, Label, StringVar, IntVar, DoubleVar, Scale, HORIZONTAL
 from tkinter.filedialog import askopenfilename
 from typing import List
 import os
@@ -28,12 +28,16 @@ class MusicPlayer:
     MUSIC_END = USEREVENT+1
     time = None
     
+
+    
     def get_audio(self):
         temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav")])
         if temp != "":
             self.file = temp
             self.file_name.set("Currently playing: " + os.path.basename(temp))
             mixer.music.load(self.file)
+            val = mixer.Sound(temp)
+            self.timescale.configure(to=val.get_length())
 
         else:
             self.file_name.set("No file selected")
@@ -50,8 +54,13 @@ class MusicPlayer:
         m = sec//60
         sec = sec % 60
         self.time.set("{:02}:{:02}".format(m, sec))
+        #Update slider
+        
 
         self.root.after(100, self.check_end)
+
+    def update_time(self, event):
+        return
     
     def reset(self):
         self.toggle = True
@@ -115,6 +124,10 @@ class MusicPlayer:
         self.time.set("0:00")
         display_time =Label(root, textvariable=self.time)
         display_time.grid(row=3, column = 0, padx=10, sticky="nw")
+
+        self.timescale = Scale(root, from_=0, to=0, orient=HORIZONTAL)
+        self.timescale.bind("<ButtonRelease-1>", self.update_time)
+        self.timescale.grid(row=4, column = 0, padx=10, sticky="nw")
 
 
         self.check_end()
