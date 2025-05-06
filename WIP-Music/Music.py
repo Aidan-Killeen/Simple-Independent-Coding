@@ -30,9 +30,10 @@ class MusicPlayer:
     
 
     
-    def get_audio(self):
+    def get_audio(self):    
         temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav")])
         if temp != "":
+            # For a valid file selection, load the file
             self.file = temp
             self.file_name.set("Currently playing: " + os.path.basename(temp))
             mixer.music.load(self.file)
@@ -40,21 +41,27 @@ class MusicPlayer:
             self.timescale.configure(to=val.get_length())
 
         else:
+            # If no valid file selected
             self.file_name.set("No file selected")
             print(self.file)
 
     def check_end(self):
+        # Check if current sound finished playing
         for e in event.get():
             if e.type == self.MUSIC_END:
                 #print('music end event')
                 self.reset()
 
+        # Check the current time
         milli = mixer.music.get_pos()
         sec = int(milli/1000)
+        # Make conditional - need to be able to alter this
+        self.timescale.set(sec)
         m = sec//60
         sec = sec % 60
         self.time.set("{:02}:{:02}".format(m, sec))
-        #Update slider
+        
+        # Addition - Update slider
         
 
         self.root.after(100, self.check_end)
@@ -102,34 +109,37 @@ class MusicPlayer:
         root.title('Music Player')
         mixer.music.set_endevent(self.MUSIC_END)
 
-
+        # Select file
         folder_but = Button(root, width=10, height=1, text = "Browse...", command = self.get_audio)
         folder_but.grid(row=0, column = 1, padx=10, sticky="nw")
 
-
+        # Display selected file
         self.file_name = StringVar()
         self.file_name.set("No file selected")
         display_name = Label(root, textvariable=self.file_name)
         display_name.grid(row=0, column = 0, padx=10, sticky="nw")
 
+        # Play/Pause Button
         self.mode = StringVar()
         self.mode.set("Play")
         play = Button(root, width=10, height=1, textvariable=self.mode, command = self.play_pause)
         play.grid(row=1, column = 0, padx=10, sticky="nw")
+
+        # Stop Button
         stop = Button(root, width=10, height=1, text = "Stop", command = self.stop)
         stop.grid(row=1, column = 1, padx=10, sticky="nw")
-        self.root = root
 
+        # Display time
         self.time = StringVar()
         self.time.set("0:00")
         display_time =Label(root, textvariable=self.time)
-        display_time.grid(row=3, column = 0, padx=10, sticky="nw")
+        display_time.grid(row=3, column = 1, padx=10, sticky="nw")
 
-        self.timescale = Scale(root, from_=0, to=0, orient=HORIZONTAL)
+        self.timescale = Scale(root, from_=0, to=0, orient=HORIZONTAL, showvalue=0)
         self.timescale.bind("<ButtonRelease-1>", self.update_time)
-        self.timescale.grid(row=4, column = 0, padx=10, sticky="nw")
+        self.timescale.grid(row=3, column = 0, padx=10, sticky="nw")
 
-
+        self.root = root
         self.check_end()
         self.root.mainloop()
         quit()
