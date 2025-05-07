@@ -24,6 +24,7 @@ class MusicPlayer:
     mixer.init()
     paused = False
     toggle = True
+    using_scale = False
     mode = None
     MUSIC_END = USEREVENT+1
     time = None
@@ -31,7 +32,7 @@ class MusicPlayer:
 
     
     def get_audio(self):    
-        temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav")])
+        temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav .ogg")])
         if temp != "":
             # For a valid file selection, load the file
             self.file = temp
@@ -55,19 +56,34 @@ class MusicPlayer:
         # Check the current time
         milli = mixer.music.get_pos()
         sec = int(milli/1000)
-        # Make conditional - need to be able to alter this
-        self.timescale.set(sec)
+        if(not self.using_scale):
+            self.timescale.set(sec)
         m = sec//60
         sec = sec % 60
         self.time.set("{:02}:{:02}".format(m, sec))
         
-        # Addition - Update slider
+        # Time is progressing on display, but not on slide if asjusted even without
+        # Error if set slide at final postion
         
 
         self.root.after(100, self.check_end)
+    def adjust_scale(self, event):
+        print("Click")
+        self.using_scale = True
 
-    def update_time(self, event):
-        return
+    def update_to_scale(self, event):
+        print("Release")
+        self.using_scale = False
+        time = float(self.timescale.get())#  * 1000
+        print(time)
+        #mixer.music.play(loops=0, start=time)
+        if self.toggle:
+            mixer.music.play(start=time)
+            self.paused = True
+            mixer.music.pause()
+        else:
+            mixer.music.rewind()
+            mixer.music.set_pos(time)
     
     def reset(self):
         self.toggle = True
@@ -129,14 +145,15 @@ class MusicPlayer:
         stop = Button(root, width=10, height=1, text = "Stop", command = self.stop)
         stop.grid(row=1, column = 1, padx=10, sticky="nw")
 
-        # Display time
+        # Display time - text
         self.time = StringVar()
         self.time.set("0:00")
         display_time =Label(root, textvariable=self.time)
         display_time.grid(row=3, column = 1, padx=10, sticky="nw")
-
+        # Display time - on scale
         self.timescale = Scale(root, from_=0, to=0, orient=HORIZONTAL, showvalue=0)
-        self.timescale.bind("<ButtonRelease-1>", self.update_time)
+        self.timescale.bind("<Button-1>", self.adjust_scale)
+        self.timescale.bind("<ButtonRelease-1>", self.update_to_scale)
         self.timescale.grid(row=3, column = 0, padx=10, sticky="nw")
 
         self.root = root
