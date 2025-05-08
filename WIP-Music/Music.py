@@ -28,8 +28,7 @@ class MusicPlayer:
     mode = None
     MUSIC_END = USEREVENT+1
     time = None
-    
-
+    sec_offset = 0
     
     def get_audio(self):    
         temp = askopenfilename(filetypes=[("Audio Files", ".mp3 .wav .ogg")])
@@ -53,20 +52,28 @@ class MusicPlayer:
                 #print('music end event')
                 self.reset()
 
-        # Check the current time
+        # Check the current time - this gets how long music playing for
+        # ERROR - keeps progressing if rewound - displays the total time spent playing music
         milli = mixer.music.get_pos()
+        #print(milli)
         sec = int(milli/1000)
         if(not self.using_scale):
-            self.timescale.set(sec)
-        m = sec//60
-        sec = sec % 60
-        self.time.set("{:02}:{:02}".format(m, sec))
+            self.timescale_val.set(sec+self.sec_offset)
+
         
         # Time is progressing on display, but not on slide if asjusted even without
         # Error if set slide at final postion
         
 
         self.root.after(100, self.check_end)
+
+    def time_display(self, var, index, mode):
+        #Whenever the variable linked to the slider changes, adjusts the label displaying the time
+        sec = self.timescale.get()
+        min = sec//60
+        sec = sec%60
+        self.time.set("{:02}:{:02}".format(min, sec))
+
     def adjust_scale(self, event):
         print("Click")
         self.using_scale = True
@@ -75,15 +82,19 @@ class MusicPlayer:
         print("Release")
         self.using_scale = False
         time = float(self.timescale.get())#  * 1000
+        self.sec_offset = time
         print(time)
         #mixer.music.play(loops=0, start=time)
-        if self.toggle:
-            mixer.music.play(start=time)
-            self.paused = True
-            mixer.music.pause()
-        else:
-            mixer.music.rewind()
-            mixer.music.set_pos(time)
+        if self.file != "":
+            if self.toggle:
+                mixer.music.play()
+                mixer.music.set_pos(time)
+                self.paused = True
+                mixer.music.pause()
+            else:
+                mixer.music.rewind()
+                mixer.music.set_pos(time)
+            self.timescale.set(time)
     
     def reset(self):
         self.toggle = True
@@ -150,8 +161,11 @@ class MusicPlayer:
         self.time.set("0:00")
         display_time =Label(root, textvariable=self.time)
         display_time.grid(row=3, column = 1, padx=10, sticky="nw")
+        self.timescale_val = IntVar()
+        self.timescale_val.trace_add('write', self.time_display)
+
         # Display time - on scale
-        self.timescale = Scale(root, from_=0, to=0, orient=HORIZONTAL, showvalue=0)
+        self.timescale = Scale(root, from_=0, to=0, orient=HORIZONTAL, showvalue=0, variable=self.timescale_val)
         self.timescale.bind("<Button-1>", self.adjust_scale)
         self.timescale.bind("<ButtonRelease-1>", self.update_to_scale)
         self.timescale.grid(row=3, column = 0, padx=10, sticky="nw")
