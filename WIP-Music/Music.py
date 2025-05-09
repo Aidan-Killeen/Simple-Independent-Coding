@@ -38,7 +38,7 @@ class MusicPlayer:
             self.file_name.set("Currently playing: " + os.path.basename(temp))
             mixer.music.load(self.file)
             val = mixer.Sound(temp)
-            self.timescale.configure(to=val.get_length())
+            self.timescale.configure(to=val.get_length()-1)     #This rounds the length up
 
         else:
             # If no valid file selected
@@ -49,21 +49,12 @@ class MusicPlayer:
         # Check if current sound finished playing
         for e in event.get():
             if e.type == self.MUSIC_END:
-                #print('music end event')
                 self.reset()
-
-        # Check the current time - this gets how long music playing for
-        # ERROR - keeps progressing if rewound - displays the total time spent playing music
+        
         milli = mixer.music.get_pos()
-        #print(milli)
         sec = int(milli/1000)
         if(not self.using_scale):
-            self.timescale_val.set(sec+self.sec_offset)
-
-        
-        # Time is progressing on display, but not on slide if asjusted even without
-        # Error if set slide at final postion
-        
+            self.timescale_val.set(sec+self.sec_offset)       
 
         self.root.after(100, self.check_end)
 
@@ -86,13 +77,15 @@ class MusicPlayer:
         print(time)
         #mixer.music.play(loops=0, start=time)
         if self.file != "":
-            if self.toggle:
+            if self.toggle: #and not self.paused: # If drag back while playing, time not displahying accuratley
                 mixer.music.play()
                 mixer.music.set_pos(time)
                 self.paused = True
                 mixer.music.pause()
             else:
-                mixer.music.rewind()
+                #mixer.music.stop()
+                #mixer.music.rewind()
+                mixer.music.play()
                 mixer.music.set_pos(time)
             self.timescale.set(time)
     
@@ -100,7 +93,8 @@ class MusicPlayer:
         self.toggle = True
         self.paused = False
         self.mode.set("Play")
-        self.time.set("0:00")
+        self.time.set("00:00")
+        self.sec_offset = 0
 
     def play_pause(self):
         if(self.file != ""):
