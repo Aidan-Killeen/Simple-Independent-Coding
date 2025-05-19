@@ -9,7 +9,19 @@ from sys import executable
 
 #Finding Program names - each one is named after the directory it is in
 def list_subfolders(dir: str) -> List[str]:
-    # dir = "."
+    """
+    Find all subfolders that contain python files
+
+    Parameters
+    ----------
+    dir : str
+        The Directory the function is searching for valid subfolders
+
+    Returns
+    ----------
+    list
+        A List of Strings containing the names of all valid subfolders to use the launcher on
+    """
     folder_names = []
     for entry_name in os.listdir(dir):
         entry_path = os.path.join(dir, entry_name)
@@ -19,6 +31,18 @@ def list_subfolders(dir: str) -> List[str]:
     return folder_names
 
 def launch(dir: str, file: str):
+    """
+    Function to Launch Other Python files
+
+    Parameters
+    ----------
+    dir : str
+        The Directory the file structure is contained within is in
+    file : str
+        The name of the folder containing the python file 
+        (Should be the same as the name of the python file)
+    """
+
     path = dir + "/" + file + "/" + file + ".py"
     print("Launching", file, path)
     
@@ -68,9 +92,6 @@ class Launcher:
         scrollbar = Scrollbar(win, orient='vertical', command = canvas.yview)
         scrollbar.pack(side = RIGHT, fill = Y)
 
-
-        
-
         s_width = scrollbar.winfo_reqwidth()
 
         sub_win = Frame(canvas, background="skyblue")
@@ -89,8 +110,9 @@ class Launcher:
         root.protocol("WM_DELETE_WINDOW", self.on_closing)
         
         canvas.configure(yscrollcommand=scrollbar.set)
-
         canvas.update()
+
+        #Setting size of scrollable area
         bbox = list(canvas.bbox("inner_frame"))
         canvas_width = canvas.winfo_width()
         canvas_heigth = canvas.winfo_height()
