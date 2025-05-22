@@ -51,6 +51,20 @@ def launch(dir: str, file: str):
     print("End")
 
 def menu(folder_names: List[str]) -> int:
+    """
+    Menu that selects which program will be opened.
+
+    Parameters
+    ----------
+    folder_names : List[str]
+        A List of strings containing the names of the folders containing the python files
+        (Should be the same name for the folder and the python file)    
+
+    Returns
+    ----------
+    int
+        The index of the file in the input array that was selected
+    """
     index = 0
     while(True):
         print("Available Programs:")
@@ -69,10 +83,26 @@ def menu(folder_names: List[str]) -> int:
     return index
 
 class Launcher:
+    """
+    A class to 
+
+    Attributes
+    ----------
+    canvas : tkinter.Canvas
+        A canvas, used to make the Button UI scrollable
+
+    dir : str
+
+
+    Methods
+    ----------
+
+    """
     def on_closing(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()
             print("Shutting Down...") 
+    
     def _on_mousewheel(self, event):
         self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
     
