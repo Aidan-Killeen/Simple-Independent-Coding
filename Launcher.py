@@ -52,7 +52,7 @@ def launch(dir: str, file: str):
 
 def menu(folder_names: List[str]) -> int:
     """
-    Menu that selects which program will be opened.
+    Text based that selects which program will be opened.
 
     Parameters
     ----------
@@ -88,14 +88,15 @@ class Launcher:
 
     Attributes
     ----------
+    root : tkinter.Tk
+        Window to display launcher in
     canvas : tkinter.Canvas
         A canvas, used to make the Button UI scrollable
-
     dir : str
-
-
-    Methods
-    ----------
+        Directory program is running in
+    files : List[str]
+        The list of folder/file names for the python files
+    
 
     """
     def on_closing(self):
@@ -104,9 +105,22 @@ class Launcher:
             print("Shutting Down...") 
     
     def _on_mousewheel(self, event):
+        """
+        Event Handler for mousewheel being scrolled.
+
+        Parameters
+        ----------
+        event : event
+            Data from the Event that is triggered by scrolling the mousewheel    
+
+        """
         self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
     
     def menu_ui(self):
+        """
+        Tkinter based UI that allows the user to select which program will be opened.
+
+        """
         root = Tk()
         window_size = 500
         root.geometry(str(window_size) + "x" + str(window_size))
@@ -168,7 +182,18 @@ class Launcher:
 
     
     
-    def __init__(self, dir=".", text=True):
+    def __init__(self, dir=".", text=False):
+        """
+        Initialises a Launcher object.
+
+        Parameters
+        ----------
+        dir : str
+            The directory to run the Laucher object in
+        text : boolean
+            Boolean to select which mode the launcher runs - True is text based, False is using a Graphical UI   
+
+        """
         folder_names = list_subfolders(dir)
         self.dir = dir
         self.files = folder_names
@@ -182,5 +207,5 @@ class Launcher:
             self.menu_ui()
 
 if __name__=="__main__":
-    #Launcher()
-    Launcher(text=False)
+    #Launcher(text=True)
+    Launcher()
