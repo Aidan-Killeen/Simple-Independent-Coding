@@ -8,7 +8,29 @@ def test_macro():
 
 def test_macros():
     print("Test 2")
-class Macro:   
+class Macro:
+    """
+    A class created to be able to run functions upon pressing a key on the keyboard
+
+    Attributes
+    ----------
+    changing_shortcut : boolean
+        ____
+    change_index : int
+        ____
+    listening : boolean
+        ____
+    top : ???
+        ____
+    commands : ???
+        ____
+    displays : ???
+        ____
+    shortcuts : List[Key]
+        The list of keys that are currently being used as shortcuts
+    
+
+    """
     changing_shortcut = False
     change_index = 0
     listening = False
@@ -75,6 +97,18 @@ class Macro:
 
     
     def __init__(self, macro_command=test_macro, *additional_macros):
+        """
+        Initialises a Macro object.
+
+        Parameters
+        ----------
+        macro_command : fuction
+            Fuction that is to be applied a keyboard shortcut
+        additional_macros : List[function]
+            A List of Functions to apply keyboard shortcuts to
+            (combined with macro_command improves versitility of input for amount of functions)   
+
+        """
         self.keyboard = Controller()
         self.listener = Listener(on_press=self.get_shortcut)
         self.listener.start()

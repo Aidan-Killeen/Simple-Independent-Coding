@@ -84,7 +84,7 @@ def menu(folder_names: List[str]) -> int:
 
 class Launcher:
     """
-    A class to 
+    A class created to be able to launch other python programs using a UI
 
     Attributes
     ----------
