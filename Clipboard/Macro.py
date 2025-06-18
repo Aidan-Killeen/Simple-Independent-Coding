@@ -1,12 +1,20 @@
-from tkinter import Tk, Button, Entry, Label, Toplevel, messagebox
+from tkinter import Tk, Button, Label, Toplevel, messagebox
 
 from tkinter import Scrollbar, RIGHT, Y, Frame, BOTH, Canvas, LEFT
 from pynput.keyboard import Key, Controller, Listener
 
 def test_macro():
+    """
+    Simple test function. 
+
+    """
     print("Test 1")
 
 def test_macros():
+    """
+    Simple test function. 
+
+    """
     print("Test 2")
 class Macro:
     """
@@ -15,17 +23,17 @@ class Macro:
     Attributes
     ----------
     changing_shortcut : boolean
-        ____
+        Boolean that adjusts class behavior when in the process of changing the shortcut associated with a function
     change_index : int
-        ____
+        Integer that holds the index of which functions' key is being changed when changing_shortcut is True
     listening : boolean
-        ____
-    top : ???
-        ____
-    commands : ???
-        ____
-    displays : ???
-        ____
+        Boolean that swaps modes between setup and running the macro - is True when setup is finished
+    top : tkinter.Toplevel
+        Popup prompting user to press a key when changing shortcut used for macro 
+    commands : List[function]
+        The list of the commands the macro runs on pressing keys
+    displays : List[tkinter.Label]
+        List of labels displaying the currently designated keys to trigger each function
     shortcuts : List[Key]
         The list of keys that are currently being used as shortcuts
     
@@ -61,9 +69,7 @@ class Macro:
             if key != Key.esc:
                 index = self.change_index
                 self.shortcuts[index] = key
-                display = self.displays[index]
-                display.delete(0, "end")
-                display.insert( len(display.get()), '{}'.format(self.shortcuts[index]))
+                self.displays[index].config(text=self.shortcuts[index])
             else:
                 print("Cannot keybind to Esc: Required to exit")
             self.changing_shortcut = False
@@ -151,10 +157,8 @@ class Macro:
             single_use = Button(sub_win, text = "Test: " + self.commands[i].__name__, command = self.commands[i])
             single_use.grid(row=i+1, column = 0)
 
-
-            self.displays[i] = Entry(sub_win, width = 50)
+            self.displays[i] = Label(sub_win, bg="white", text=self.shortcuts[i], width = 40)
             self.displays[i].grid(row=i+1, column = 1)
-            self.displays[i].insert( len(self.displays[i].get()), '{}'.format(self.shortcuts[i]))   #change this to var
 
             change = Button(sub_win, text="Change", command= lambda i = i: self.change(i))
             change.grid(row=i+1, column=2)
