@@ -5,14 +5,14 @@ from pynput.keyboard import Key, Controller, Listener
 
 def test_macro():
     """
-    Simple test function. 
+    Simple test function to feed into Macro class constructor. 
 
     """
     print("Test 1")
 
 def test_macros():
     """
-    Simple test function. 
+    Simple test function to feed into Macro class constructor. 
 
     """
     print("Test 2")
