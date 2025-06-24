@@ -5,6 +5,10 @@ from os import startfile
 from platform import system
 
 def browse():
+    """
+    Function that loops opening a file dialog, and opens the file using the system default whenever a file is selected. 
+
+    """
     run = True
     while run:
         file = askopenfilename(title="Select a File")
@@ -18,7 +22,6 @@ def browse():
                 startfile(file)
             else:
                 call(('xdg-open', file))
-    #Need to open the file using system default
 
 if __name__=="__main__":
     root = Tk()
