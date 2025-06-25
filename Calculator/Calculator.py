@@ -12,11 +12,31 @@ Created on Mon Nov 14 19:56:52 2022
 from tkinter import *
 
 class Calculator:
+    """
+    A simple calculator class
+
+    Attributes
+    ----------
+    variable : int
+        Integer that stores previously calculated values when doing a mathematical fuction
+    operation : str
+        String that stores which operation the calculator is going to perform upon pressing equals key
+    input_box : tkinter.Entry
+        A tkinter.Entry which stores and displays the current integer you are entering into the calculator
+    """
     variable = 0
     operation = ""
     input_box = None
         
     def clicked(self, x):
+        """
+        A class created to be able to run functions upon pressing a key on the keyboard
+
+        Parameters
+        ----------
+        x : int
+            A Value of 0-9 that is going to be appended to the current value within the input_box
+        """
         if (self.input_box.get() == "0"):
             self.input_box.delete(0, "end")
         self.input_box.insert( len(self.input_box.get()), x)
