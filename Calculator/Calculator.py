@@ -30,7 +30,7 @@ class Calculator:
         
     def clicked(self, x):
         """
-        A class created to be able to run functions upon pressing a key on the keyboard
+        A function created to alter the input_box based on what numeric key is pressed
 
         Parameters
         ----------
@@ -42,15 +42,31 @@ class Calculator:
         self.input_box.insert( len(self.input_box.get()), x)
         
     def clear_all(self):
+        """
+        A function to fully reset the calculator
+
+        """
         self.clear_box()
-        global variable
-        variable = 0
+        self.variable = 0
+        self.operation=""
         
     def clear_box(self):
+        """
+        A function to clear the input_box
+
+        """
         self.input_box.delete(0, "end")
         self.input_box.insert( len(self.input_box.get()), "0")
         
     def op_click(self, op: str):
+        """
+        A function to solve any prior operations, the set up for a new operator
+
+        Parameters
+        ----------
+        op : str
+            One of the operation symbols (+-*/) for the equation that is next occuring
+        """
         if(self.variable == 0):
             self.variable = int(self.input_box.get())
         else:
@@ -59,6 +75,10 @@ class Calculator:
         self.clear_box()
         
     def equal_click(self):
+        """
+        A function to solve the current operation
+
+        """
         temp = None
         box_val = int(self.input_box.get())
         if(self.operation == "+"):
@@ -78,6 +98,10 @@ class Calculator:
         self.operation = ""
         
     def __init__(self):
+        """
+        Initialises a Calculator object.
+
+        """
         root = Tk()
         root.geometry("500x500")
         root.title("Simple Calculator")
