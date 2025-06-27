@@ -48,6 +48,15 @@ class Macro:
     shortcuts = [Key.insert]
 
     def change(self, i):
+        """
+        Function to prompt user if they decide to change the shortcut key for a function - adjusts variables for listener function to do so
+
+        Parameters
+        ----------
+        i : int
+            Index of the function that is having it's shortcut adjusted
+
+        """
         #Changes mode of get_shortcut function
         if self.changing_shortcut == False:
             self.changing_shortcut = True
@@ -63,6 +72,15 @@ class Macro:
             self.top.rowconfigure(0, weight=1)
 
     def get_shortcut(self, key):
+        """
+        Listener function that will adjust which key is used for each function if in preparation mode or triggers the functions if in listening mode
+
+        Parameters
+        ----------
+        key : Key
+            The key that has been pressed, triggering the listener
+        
+        """
         #If swapping what hotkey is being used
         if self.changing_shortcut:
             # Find the index of the keybind being changed
@@ -90,12 +108,19 @@ class Macro:
                 return False
 
     def macro_start(self):
-        #Removes the window, changes get_shortcut into macro mode
+        """
+        Swaps the Macro object out of preparation mode and into listening mode
+
+        """
         self.root.destroy()
         print("Launching Macro")
         self.listening = True
         
     def on_closing(self):
+        """
+        Creates a prompt to ask if you really want to close program
+        
+        """
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.root.destroy()
             self.listener.stop()
