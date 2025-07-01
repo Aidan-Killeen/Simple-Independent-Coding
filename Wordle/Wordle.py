@@ -1,3 +1,7 @@
+from flask import Flask
+
+app = Flask(__name__)
+
 def make_guess(guess: str, target: str):
     output = [""]*len(target)
     solved = True
@@ -17,16 +21,25 @@ def make_guess(guess: str, target: str):
 #Archive prior guesses and colors
 #Create UI
 #Get randomised list of words for game
-if __name__=="__main__":
+# Options - retrieve json using random date from 19/06/2021 https://www.nytimes.com/svc/wordle/v2/{yyyy}-{MM}-{dd}.json
+@app.route("/")
+def game():
     solved = False
-    while not solved:
+    i = 0
+    while not solved and i < 6:
         guess = input("Make a Guess: ")
         target = "minow"
         if len(guess) != len(target):
             print("Error: Lenght mismatch")
         else:
             out, solved = make_guess(guess, target)
-            if solved:
-                print("You Win!")
-            else:
+            if not solved:
                 print("Incorrect guess, try again", out)
+        i += 1            
+    if solved:
+        return("You Win!")
+    else:
+        return("Failed")
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8080, debug=True)
