@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -22,24 +22,37 @@ def make_guess(guess: str, target: str):
 #Create UI
 #Get randomised list of words for game
 # Options - retrieve json using random date from 19/06/2021 https://www.nytimes.com/svc/wordle/v2/{yyyy}-{MM}-{dd}.json
+
+target = "minow"
+guess_no = 0
+
 @app.route("/")
 def game():
-    solved = False
-    i = 0
-    while not solved and i < 6:
-        guess = input("Make a Guess: ")
-        target = "minow"
+    global guess_no
+    guess = request.args.get("guess", "")
+    if guess:
         if len(guess) != len(target):
-            print("Error: Lenght mismatch")
+            output = "Error: Length mismatch"
         else:
             out, solved = make_guess(guess, target)
             if not solved:
-                print("Incorrect guess, try again", out)
-        i += 1            
-    if solved:
-        return("You Win!")
+                output = "Incorrect guess, try again " + str(out)
+            else:
+                output = "Correct!"
+            guess_no += 1
     else:
-        return("Failed")
+        output = ""
+
+    return(
+        """<form action="" method="get">
+                Make a Guess: <input type="text" name="guess">
+                <input type="submit" value="Submit">
+            </form>"""
+        + "Last Guess: "
+        + output
+        + "<br>Current Guess: "
+        + str(guess_no)
+    )
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8080, debug=True)
