@@ -32,7 +32,11 @@ target = "minow"
 def game():
     #global guess_no
     guess_no = int(request.cookies.get('guess_no', 0))
-    prev_guesses = json.loads(str(request.cookies.get('prev_guesses', '{ "prior":[]}')))
+    if 'prev_guesses' in request.cookies:
+        prev_guesses = json.loads(request.cookies.get('prev_guesses'))
+    else:
+        prev_guesses = { "prior":[]}
+    #prev_guesses = json.loads(str(request.cookies.get('prev_guesses', '{ "prior":[]}')))
     
     print(prev_guesses)
     valid = False
@@ -52,21 +56,34 @@ def game():
     else:
         output = ""
 
-    resp = make_response("""<form action="" method="get">
+    resp = make_response("""
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+            <form action="" method="get">
                 Make a Guess: <input type="text" name="guess">
                 <input type="submit" value="Submit">
             </form>"""
-        + "Last Guess: "
-        + output
-        + ", Prior Guesses: "
-        + str(prev_guesses)
-        + "<br>Current Guess: "
-        + str(guess_no))
+            + "Last Guess: "
+            + output
+            + ", Prior Guesses: "
+            + str(prev_guesses)
+            + "<br>Current Guess: "
+            + str(guess_no)
+            + """
+            <div class="container">
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>  
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>  
+            </div>
+            """)
     
     resp.set_cookie('guess_no', str(guess_no))
     if valid:
         print(prev_guesses)
         resp.set_cookie('prev_guesses', json.dumps(prev_guesses))
+        #resp.set_cookie('prev_guesses', prev_guesses)
     return(resp)
 
 if __name__ == "__main__":
