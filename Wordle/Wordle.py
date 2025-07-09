@@ -1,7 +1,10 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, Blueprint, render_template
 import json
+import requests
+from datetime import datetime
 
 app = Flask(__name__)
+#bp = Blueprint('Wordle', __name__, url_prefix='')
 
 def make_guess(guess: str, target: str):
     output = [""]*len(target)
@@ -21,10 +24,11 @@ def make_guess(guess: str, target: str):
 #Todo
 #Archive prior guesses and colors
 #Create UI
-#Get randomised list of words for game
-# Options - retrieve json using random date from 19/06/2021 https://www.nytimes.com/svc/wordle/v2/{yyyy}-{MM}-{dd}.json
-
-target = "minow"
+# Randomisation - retrieve json using random date from 19/06/2021
+current = datetime.today().strftime('%Y-%m-%d')
+target = requests.get('https://www.nytimes.com/svc/wordle/v2/'+current+'.json').json()["solution"]
+print(target)
+#target = "minow"
 #guess_no = 0
 #prev_guesses = []
 
@@ -36,9 +40,8 @@ def game():
         prev_guesses = json.loads(request.cookies.get('prev_guesses'))
     else:
         prev_guesses = { "prior":[]}
-    #prev_guesses = json.loads(str(request.cookies.get('prev_guesses', '{ "prior":[]}')))
     
-    print(prev_guesses)
+    # print(prev_guesses)
     valid = False
     guess = request.args.get("guess", "")
     if guess:
@@ -57,7 +60,6 @@ def game():
         output = ""
 
     resp = make_response("""
-            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
             <form action="" method="get">
                 Make a Guess: <input type="text" name="guess">
                 <input type="submit" value="Submit">
@@ -67,24 +69,15 @@ def game():
             + ", Prior Guesses: "
             + str(prev_guesses)
             + "<br>Current Guess: "
-            + str(guess_no)
-            + """
-            <div class="container">
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>  
-                <div>4</div>
-                <div>5</div>
-                <div>6</div>  
-            </div>
-            """)
+            + str(guess_no))
     
     resp.set_cookie('guess_no', str(guess_no))
     if valid:
         print(prev_guesses)
         resp.set_cookie('prev_guesses', json.dumps(prev_guesses))
-        #resp.set_cookie('prev_guesses', prev_guesses)
-    return(resp)
+    #return render_template("base.html", VARS) 
+    return render_template("base.html")
+    #return(resp)
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8080, debug=True)
