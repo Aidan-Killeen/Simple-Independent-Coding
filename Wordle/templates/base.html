@@ -9,8 +9,15 @@
 
 <body>
 <form action="" method="get">
-                Make a Guess: <input type="text" name="guess">
-                <input type="submit" value="Submit">
+    Make a Guess: <input type="text" name="guess">
+    <input type="submit" value="Submit">
+    <br> Last Guess: {{ output }}, Prior Guesses: {{ prev_guesses }}
+    <br> Current Guess: {{ guess_no }}
+
+</form>
+
+<form action = "reset" method="get">
+    <input type="submit" value="Reset">
 </form>
 
 <div class="container">
@@ -19,7 +26,31 @@
     <div>3</div>  
     <div>4</div>
     <div>5</div>
-    <div>6</div>  
+
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>  
+    <div>4</div>
+    <div>5</div>
+    
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>  
+    <div>4</div>
+    <div>5</div>
+    
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>  
+    <div>4</div>
+    <div>5</div>
+
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>  
+    <div>4</div>
+    <div>5</div>
+      
 </div>
 </body>
 </html>

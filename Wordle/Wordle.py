@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, Blueprint, render_template
+from flask import Flask, request, make_response, Blueprint, render_template, redirect, url_for
 import json
 import requests
 from datetime import datetime
@@ -28,20 +28,16 @@ def make_guess(guess: str, target: str):
 current = datetime.today().strftime('%Y-%m-%d')
 target = requests.get('https://www.nytimes.com/svc/wordle/v2/'+current+'.json').json()["solution"]
 print(target)
-#target = "minow"
-#guess_no = 0
-#prev_guesses = []
 
 @app.route("/")
 def game():
-    #global guess_no
     guess_no = int(request.cookies.get('guess_no', 0))
     if 'prev_guesses' in request.cookies:
         prev_guesses = json.loads(request.cookies.get('prev_guesses'))
     else:
         prev_guesses = { "prior":[]}
     
-    # print(prev_guesses)
+    print(prev_guesses)
     valid = False
     guess = request.args.get("guess", "")
     if guess:
@@ -59,25 +55,21 @@ def game():
     else:
         output = ""
 
-    resp = make_response("""
-            <form action="" method="get">
-                Make a Guess: <input type="text" name="guess">
-                <input type="submit" value="Submit">
-            </form>"""
-            + "Last Guess: "
-            + output
-            + ", Prior Guesses: "
-            + str(prev_guesses)
-            + "<br>Current Guess: "
-            + str(guess_no))
+    resp = make_response(render_template("base.html", output=output, prev_guesses=prev_guesses, guess_no=guess_no))
     
     resp.set_cookie('guess_no', str(guess_no))
     if valid:
         print(prev_guesses)
         resp.set_cookie('prev_guesses', json.dumps(prev_guesses))
-    #return render_template("base.html", VARS) 
-    return render_template("base.html")
-    #return(resp)
+    return resp
+
+@app.route("/reset")
+def reset():
+    resp = make_response(redirect(url_for('game')))
+    resp.delete_cookie('guess_no')
+    resp.delete_cookie('prev_guesses')
+    return resp
+
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8080, debug=True)
