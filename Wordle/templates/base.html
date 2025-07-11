@@ -21,36 +21,14 @@
 </form>
 
 <div class="container">
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>  
-    <div>4</div>
-    <div>5</div>
-
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>  
-    <div>4</div>
-    <div>5</div>
-    
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>  
-    <div>4</div>
-    <div>5</div>
-    
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>  
-    <div>4</div>
-    <div>5</div>
-
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>  
-    <div>4</div>
-    <div>5</div>
+    {% for word in prev_guesses['prior'] %}
+        {% for i in range(5) %}
+            <div>{{word[0][i]}}</div>
+        {% endfor %}
+    {% endfor %}
       
 </div>
+
+
 </body>
 </html>

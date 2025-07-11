@@ -50,7 +50,7 @@ def game():
                 output = "Incorrect guess, try again " + str(out)
             else:
                 output = "Correct!"
-            prev_guesses["prior"].append((guess, out))
+            prev_guesses["prior"].append([guess, out])
             guess_no += 1
     else:
         output = ""
