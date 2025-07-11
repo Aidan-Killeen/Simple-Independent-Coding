@@ -22,8 +22,8 @@ def make_guess(guess: str, target: str):
     return output, solved
 
 #Todo
-#Archive prior guesses and colors
-#Create UI
+# Display colors
+# Change cookie dict to be dict of guesses? - default would be {word: "     ", matches[(five color)]}
 # Randomisation - retrieve json using random date from 19/06/2021
 current = datetime.today().strftime('%Y-%m-%d')
 target = requests.get('https://www.nytimes.com/svc/wordle/v2/'+current+'.json').json()["solution"]
