@@ -7,7 +7,7 @@ app = Flask(__name__)
 #bp = Blueprint('Wordle', __name__, url_prefix='')
 
 def make_guess(guess: str, target: str):
-    output = [""]*len(target)
+    output = ["gray"]*len(target)
     solved = True
     for i in range(len(guess)):
         char = guess[i]
@@ -22,12 +22,15 @@ def make_guess(guess: str, target: str):
     return output, solved
 
 #Todo
-# Display colors
+# Error checking - stop guesses when win
+# Add grid of letters already guessed - seperate element on right of guesses
 # Change cookie dict to be dict of guesses? - default would be {word: "     ", matches[(five color)]}
 # Randomisation - retrieve json using random date from 19/06/2021
+
 current = datetime.today().strftime('%Y-%m-%d')
 target = requests.get('https://www.nytimes.com/svc/wordle/v2/'+current+'.json').json()["solution"]
 print(target)
+max_guesses = 6
 
 @app.route("/")
 def game():
@@ -35,7 +38,7 @@ def game():
     if 'prev_guesses' in request.cookies:
         prev_guesses = json.loads(request.cookies.get('prev_guesses'))
     else:
-        prev_guesses = { "prior":[]}
+        prev_guesses = { "prior":[["     ",["gray"]*len(target)]]*max_guesses}
     
     print(prev_guesses)
     valid = False
@@ -43,14 +46,17 @@ def game():
     if guess:
         if len(guess) != len(target):
             output = "Error: Length mismatch"
+        elif guess_no >= max_guesses:
+            output = "You have run out of guesses"
         else:
             out, solved = make_guess(guess, target)
             valid = True
             if not solved:
-                output = "Incorrect guess, try again " + str(out)
+                output = "Incorrect guess, try again "
             else:
                 output = "Correct!"
-            prev_guesses["prior"].append([guess, out])
+            #prev_guesses["prior"].append([guess, out])
+            prev_guesses["prior"][guess_no] = [guess.upper(), out]
             guess_no += 1
     else:
         output = ""

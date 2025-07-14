@@ -11,7 +11,7 @@
 <form action="" method="get">
     Make a Guess: <input type="text" name="guess">
     <input type="submit" value="Submit">
-    <br> Last Guess: {{ output }}, Prior Guesses: {{ prev_guesses }}
+    <br> Last Guess: {{ output }}
     <br> Current Guess: {{ guess_no }}
 
 </form>
@@ -23,7 +23,7 @@
 <div class="container">
     {% for word in prev_guesses['prior'] %}
         {% for i in range(5) %}
-            <div>{{word[0][i]}}</div>
+            <div correct='{{word[1][i]}}'>{{word[0][i]}}</div>
         {% endfor %}
     {% endfor %}
       
