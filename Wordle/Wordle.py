@@ -22,7 +22,6 @@ def make_guess(guess: str, target: str):
     return output, solved
 
 #Todo
-# Error checking - stop guesses when win
 # Add grid of letters already guessed - seperate element on right of guesses
 # Change cookie dict to be dict of guesses? - default would be {word: "     ", matches[(five color)]}
 # Randomisation - retrieve json using random date from 19/06/2021
@@ -41,9 +40,14 @@ def game():
         prev_guesses = { "prior":[["     ",["gray"]*len(target)]]*max_guesses}
     
     print(prev_guesses)
+    prev_words = [ x[0].lower() for x in prev_guesses["prior"] ]
+    print("Prev:", prev_words)
+    won = target in prev_words
     valid = False
     guess = request.args.get("guess", "")
-    if guess:
+    if won:
+        output = "You already won!"
+    elif guess and not guess in prev_words:
         if len(guess) != len(target):
             output = "Error: Length mismatch"
         elif guess_no >= max_guesses:
@@ -55,7 +59,6 @@ def game():
                 output = "Incorrect guess, try again "
             else:
                 output = "Correct!"
-            #prev_guesses["prior"].append([guess, out])
             prev_guesses["prior"][guess_no] = [guess.upper(), out]
             guess_no += 1
     else:
