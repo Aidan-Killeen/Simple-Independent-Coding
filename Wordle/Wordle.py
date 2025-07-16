@@ -33,21 +33,29 @@ max_guesses = 6
 
 @app.route("/")
 def game():
-    guess_no = int(request.cookies.get('guess_no', 0))
     if 'prev_guesses' in request.cookies:
         prev_guesses = json.loads(request.cookies.get('prev_guesses'))
     else:
-        prev_guesses = { "prior":[["     ",["gray"]*len(target)]]*max_guesses}
-    
+        prev_guesses = { 
+            "words":["     "]*max_guesses,
+            "colors":[["gray"]*len(target)]*max_guesses,
+            "guess_no": 0,
+            "green_letters":[],    #unused yet
+            "yellow_letters":[],
+            
+            }
     print(prev_guesses)
-    prev_words = [ x[0].lower() for x in prev_guesses["prior"] ]
-    print("Prev:", prev_words)
-    won = target in prev_words
+    guess_no = prev_guesses["guess_no"]
+    words = prev_guesses["words"]
+
+    #prev_words = [ x[0].lower() for x in prev_guesses["words"] ]
+    print("Prev:", words)
+    won = target.upper() in words
     valid = False
     guess = request.args.get("guess", "")
     if won:
         output = "You already won!"
-    elif guess and not guess in prev_words:
+    elif guess and guess.upper() not in words:
         if len(guess) != len(target):
             output = "Error: Length mismatch"
         elif guess_no >= max_guesses:
@@ -59,14 +67,22 @@ def game():
                 output = "Incorrect guess, try again "
             else:
                 output = "Correct!"
-            prev_guesses["prior"][guess_no] = [guess.upper(), out]
+            words[guess_no] = guess.upper()
+            prev_guesses["colors"][guess_no] = out
             guess_no += 1
     else:
         output = ""
 
-    resp = make_response(render_template("base.html", output=output, prev_guesses=prev_guesses, guess_no=guess_no))
+    resp = make_response(render_template("base.html", 
+                                        output=output, 
+                                        no_words=max_guesses,
+                                        words=words,
+                                        colors=prev_guesses["colors"],
+                                        guess_no=guess_no
+                                        ))
     
-    resp.set_cookie('guess_no', str(guess_no))
+    prev_guesses["guess_no"] = guess_no
+    prev_guesses["words"] = words
     if valid:
         print(prev_guesses)
         resp.set_cookie('prev_guesses', json.dumps(prev_guesses))
@@ -75,7 +91,6 @@ def game():
 @app.route("/reset")
 def reset():
     resp = make_response(redirect(url_for('game')))
-    resp.delete_cookie('guess_no')
     resp.delete_cookie('prev_guesses')
     return resp
 
