@@ -1,12 +1,16 @@
-.container {
+.wordle {
   display: grid;
-  grid-template-columns: 100px 100px 100px 100px 100px;
+  grid-template-columns: repeat(5, 100px);
   background-color: white;
   padding: 10px;
 }
 
+.keyboard {
+  display: grid;
+}
 
-.container > div
+
+.wordle > square
 {
   color: white;
   border: 1px solid black;
@@ -17,14 +21,14 @@
   text-align: center;
 }
 
-.container > div[correct="gray"]{
+.wordle > square[correct="gray"]{
   background-color: gray;
 }
 
-.container > div[correct="green"]{
+.wordle > square[correct="green"]{
   background-color: green;
 }
 
-.container > div[correct="yellow"]{
+.wordle > square[correct="yellow"]{
   background-color: gold;
 }

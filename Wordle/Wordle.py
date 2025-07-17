@@ -2,27 +2,38 @@ from flask import Flask, request, make_response, Blueprint, render_template, red
 import json
 import requests
 from datetime import datetime
+from typing import Dict
 
 app = Flask(__name__)
-#bp = Blueprint('Wordle', __name__, url_prefix='')
 
-def make_guess(guess: str, target: str):
+def make_guess(guess: str, target: str, prev_guesses: Dict):
     output = ["gray"]*len(target)
     solved = True
+    yellow = set(prev_guesses["yellow_l"])
+    green = set(prev_guesses["green_l"])
+    gray = set(prev_guesses["gray_l"])
     for i in range(len(guess)):
         char = guess[i]
         if target[i] == char:
+            yellow.discard(char)
+            green.add(char)
             output[i] = "green"
         elif char in target:
+            yellow.add(char)
             output[i] = "yellow"
             solved = False
         else:
+            gray.add(char)
             solved = False
+        prev_guesses["green_l"] = list(green)
+        prev_guesses["yellow_l"] = list(yellow)
+        prev_guesses["gray_l"] = list(gray)
 
     return output, solved
 
 #Todo
 # Add grid of letters already guessed - seperate element on right of guesses
+# Instead of default search bar, change to have text entry happen within grid
 # Change cookie dict to be dict of guesses? - default would be {word: "     ", matches[(five color)]}
 # Randomisation - retrieve json using random date from 19/06/2021
 
@@ -40,15 +51,15 @@ def game():
             "words":["     "]*max_guesses,
             "colors":[["gray"]*len(target)]*max_guesses,
             "guess_no": 0,
-            "green_letters":[],    #unused yet
-            "yellow_letters":[],
+            "green_l":[],    #unused yet
+            "yellow_l":[],
+            "gray_l":[]
             
             }
     print(prev_guesses)
     guess_no = prev_guesses["guess_no"]
     words = prev_guesses["words"]
 
-    #prev_words = [ x[0].lower() for x in prev_guesses["words"] ]
     print("Prev:", words)
     won = target.upper() in words
     valid = False
@@ -61,7 +72,7 @@ def game():
         elif guess_no >= max_guesses:
             output = "You have run out of guesses"
         else:
-            out, solved = make_guess(guess, target)
+            out, solved = make_guess(guess, target, prev_guesses)
             valid = True
             if not solved:
                 output = "Incorrect guess, try again "
@@ -73,13 +84,12 @@ def game():
     else:
         output = ""
 
-    resp = make_response(render_template("base.html", 
-                                        output=output, 
-                                        no_words=max_guesses,
-                                        words=words,
-                                        colors=prev_guesses["colors"],
-                                        guess_no=guess_no
-                                        ))
+    resp = make_response(render_template(
+        "base.html", 
+        output=output, 
+        words=words,
+        colors=prev_guesses["colors"],
+        guess_no=guess_no))
     
     prev_guesses["guess_no"] = guess_no
     prev_guesses["words"] = words

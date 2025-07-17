@@ -20,10 +20,11 @@
     <input type="submit" value="Reset">
 </form>
 
-<div class="container">
-    {% for i in range(no_words) %}
-        {% for j in range(5) %}
-            <div correct='{{colors[i][j]}}'>{{words[i][j]}}</div>
+<div class="wordle">
+    {% for color_row in colors %}
+        {% set rowloop = loop.index0 %}
+        {% for color in color_row %}
+            <square correct='{{color}}'>{{words[rowloop][loop.index0]}}</square>
         {% endfor %}
     {% endfor %}
       
