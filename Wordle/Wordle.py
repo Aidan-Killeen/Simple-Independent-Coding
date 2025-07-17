@@ -32,6 +32,7 @@ def make_guess(guess: str, target: str, prev_guesses: Dict):
     return output, solved
 
 #Todo
+# Adjust Make_guess to automatically add parameters to prev_guesses (will reduce amount of outputs)
 # Add grid of letters already guessed - seperate element on right of guesses
 # Instead of default search bar, change to have text entry happen within grid
 # Change cookie dict to be dict of guesses? - default would be {word: "     ", matches[(five color)]}
