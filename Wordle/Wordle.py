@@ -35,14 +35,13 @@ def make_guess(guess: str, target: str, prev_guesses: Dict):
 # Adjust Make_guess to automatically add parameters to prev_guesses (will reduce amount of outputs)
 # Add grid of letters already guessed - seperate element on right of guesses
 # Instead of default search bar, change to have text entry happen within grid
-# Change cookie dict to be dict of guesses? - default would be {word: "     ", matches[(five color)]}
 # Randomisation - retrieve json using random date from 19/06/2021
 
 current = datetime.today().strftime('%Y-%m-%d')
 target = requests.get('https://www.nytimes.com/svc/wordle/v2/'+current+'.json').json()["solution"]
 print(target)
 max_guesses = 6
-
+letter_list = "qwertyuiop asdfghjkl zxcvbnm"
 @app.route("/")
 def game():
     if 'prev_guesses' in request.cookies:
@@ -52,7 +51,7 @@ def game():
             "words":["     "]*max_guesses,
             "colors":[["gray"]*len(target)]*max_guesses,
             "guess_no": 0,
-            "green_l":[],    #unused yet
+            "green_l":[],
             "yellow_l":[],
             "gray_l":[]
             
@@ -90,6 +89,7 @@ def game():
         output=output, 
         words=words,
         colors=prev_guesses["colors"],
+        letter_list=letter_list,
         guess_no=guess_no))
     
     prev_guesses["guess_no"] = guess_no

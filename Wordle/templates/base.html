@@ -30,6 +30,19 @@
       
 </div>
 
+<div class="letters">
+    {% for letter in letter_list %}
+        {% if letter in " "%}
+            <br>
+        {% else %}
+            <div>{{letter}}</div>
+        {% endif %}
+        
+
+    {% endfor %}
+
+</div>
+
 
 </body>
 </html>
