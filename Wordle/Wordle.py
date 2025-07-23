@@ -32,8 +32,8 @@ def make_guess(guess: str, target: str, prev_guesses: Dict):
     return output, solved
 
 #Todo
+# Adjust Layout - have elements next to each other
 # Adjust Make_guess to automatically add parameters to prev_guesses (will reduce amount of outputs)
-# Add grid of letters already guessed - seperate element on right of guesses
 # Instead of default search bar, change to have text entry happen within grid
 # Randomisation - retrieve json using random date from 19/06/2021
 
@@ -90,6 +90,9 @@ def game():
         words=words,
         colors=prev_guesses["colors"],
         letter_list=letter_list,
+        green_list=prev_guesses["green_l"],
+        yellow_list=prev_guesses["yellow_l"],
+        gray_list=prev_guesses["gray_l"],
         guess_no=guess_no))
     
     prev_guesses["guess_no"] = guess_no
