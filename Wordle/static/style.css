@@ -1,11 +1,16 @@
+
 .wordle {
+  display: inline;
+}
+
+.game {
   display: grid;
   grid-template-columns: repeat(5, 100px);
   background-color: white;
   padding: 10px;
 }
 
-.wordle > square
+.game > square
 {
   color: white;
   border: 1px solid black;
@@ -16,15 +21,15 @@
   text-align: center;
 }
 
-.wordle > square[correct="gray"]{
+.game > square[correct="gray"]{
   background-color: gray;
 }
 
-.wordle > square[correct="green"]{
+.game > square[correct="green"]{
   background-color: green;
 }
 
-.wordle > square[correct="yellow"]{
+.game > square[correct="yellow"]{
   background-color: gold;
 }
 
@@ -34,6 +39,7 @@
   grid-template-columns: repeat(10, 30px);
   background-color: white;
   padding: 10px;
+  height: 90px;
 }
 
 .letters > div{

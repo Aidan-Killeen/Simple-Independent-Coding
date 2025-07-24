@@ -8,52 +8,47 @@
 </head>
 
 <body>
+    
+    <div class="wordle">
+        <div class="game">
+            {% for color_row in colors %}
+                {% set rowloop = loop.index0 %}
+                {% for color in color_row %}
+                    <square correct='{{color}}'>{{words[rowloop][loop.index0]}}</square>
+                {% endfor %}
+            {% endfor %}
+            
+        </div>
+        <div class="letters">
+            {% for letter in letter_list %}
+                {% if letter in " "%}
+                    <br>
+                
+                {% else %}
+                    {% if letter in green_list %}
+                        <div guessed="green">
+                    {% elif letter in yellow_list %}
+                        <div guessed="yellow">
+                    {% elif letter in gray_list %}
+                        <div guessed="gray">
+                    {% else %}
+                        <div>
+                    {% endif %}
+                    {{letter}}</div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
     <form action="" method="get">
         Make a Guess: <input type="text" name="guess">
         <input type="submit" value="Submit">
-        <br> Last Guess: {{ output }}
-        <br> Current Guess: {{ guess_no }}
+        <br> {{ output }}
 
     </form>
 
     <form action = "reset" method="get">
         <input type="submit" value="Reset">
     </form>
-
-    <div class="wordle">
-        {% for color_row in colors %}
-            {% set rowloop = loop.index0 %}
-            {% for color in color_row %}
-                <square correct='{{color}}'>{{words[rowloop][loop.index0]}}</square>
-            {% endfor %}
-        {% endfor %}
-        
-    </div>
-
-    <div class="letters">
-        {% for letter in letter_list %}
-            {% if letter in " "%}
-                <br>
-            
-            {% else %}
-                {% if letter in green_list %}
-                    <div guessed="green">
-                {% elif letter in yellow_list %}
-                    <div guessed="yellow">
-                {% elif letter in gray_list %}
-                    <div guessed="gray">
-                {% else %}
-                    <div>
-                {% endif %}
-                {{letter}}</div>
-            {% endif %}
-                
-            
-
-        {% endfor %}
-
-    </div>
-
 
 </body>
 </html>
