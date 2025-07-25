@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, Blueprint, render_template, redirect, url_for
+from flask import Flask, request, make_response, render_template, redirect, url_for
 import json
 import requests
 from datetime import datetime
@@ -7,7 +7,7 @@ from typing import Dict
 app = Flask(__name__)
 
 def make_guess(guess: str, target: str, prev_guesses: Dict):
-    output = ["gray"]*len(target)
+    output = ["gray"] * len(target)
     solved = True
     yellow = set(prev_guesses["yellow_l"])
     green = set(prev_guesses["green_l"])
@@ -42,6 +42,7 @@ target = requests.get('https://www.nytimes.com/svc/wordle/v2/'+current+'.json').
 print(target)
 max_guesses = 6
 letter_list = "qwertyuiop asdfghjkl zxcvbnm"
+
 @app.route("/")
 def game():
     if 'prev_guesses' in request.cookies:
@@ -64,6 +65,7 @@ def game():
     won = target.upper() in words
     valid = False
     guess = request.args.get("guess", "")
+    output = ""
     if won:
         output = "You already won!"
     elif guess and guess.upper() not in words:
@@ -74,15 +76,11 @@ def game():
         else:
             out, solved = make_guess(guess, target, prev_guesses)
             valid = True
-            if not solved:
-                output = "Incorrect guess, try again "
-            else:
+            if solved:
                 output = "Correct!"
             words[guess_no] = guess.upper()
             prev_guesses["colors"][guess_no] = out
             guess_no += 1
-    else:
-        output = ""
 
     resp = make_response(render_template(
         "base.html", 
