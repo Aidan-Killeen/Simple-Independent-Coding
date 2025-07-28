@@ -33,6 +33,7 @@ def make_guess(guess: str, target: str, prev_guesses: Dict):
 
 #Todo
 # Adjust Layout - have elements next to each other
+# ?Textbox - instead of one, have 5, and force focus to next whenever the letter changes
 # Adjust Make_guess to automatically add parameters to prev_guesses (will reduce amount of outputs)
 # Instead of default search bar, change to have text entry happen within grid
 # Randomisation - retrieve json using random date from 19/06/2021

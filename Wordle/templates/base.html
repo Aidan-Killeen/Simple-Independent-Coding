@@ -40,7 +40,7 @@
         </div>
     </div>
     <form action="" method="get">
-        Make a Guess: <input type="text" name="guess">
+        <input type="textarea" name="guess" autocomplete="off" autocapitalize="on" maxlength="5" onkeyup="if(this.value.length == 5) this.blur()">
         <input type="submit" value="Submit">
         <br> {{ output }}
 
