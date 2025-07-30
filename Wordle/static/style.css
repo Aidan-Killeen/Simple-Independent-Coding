@@ -11,6 +11,19 @@ input[name="guess"]{
   white-space: nowrap;
 }
 
+input[name="guess_letter"]{
+  height: 100px;
+  width: 100px;
+  font-size: 30px;
+  text-align: center;
+  font-family: monaco, monospace;
+  text-transform:uppercase;
+  background: transparent;
+  text-overflow: clip;
+  white-space: nowrap;
+  padding: 10px;
+}
+
 
 .wordle {
   display: inline;

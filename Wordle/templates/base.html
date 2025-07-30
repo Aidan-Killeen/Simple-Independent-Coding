@@ -40,6 +40,13 @@
         </div>
     </div>
     <form action="" method="get">
+        {% for i in range(5) %}
+            <input type="text" name="guess_letter" id="{{i}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="this.next().focus()">
+        {% endfor %}
+        <input type="submit" value="Submit">
+
+    </form>
+    <form action="" method="get">
         <input type="textarea" name="guess" autocomplete="off" autocapitalize="on" maxlength="5" onkeyup="if(this.value.length == 5) this.blur()">
         <input type="submit" value="Submit">
         <br> {{ output }}
