@@ -21,7 +21,7 @@ input[name="guess_letter"]{
   background: transparent;
   text-overflow: clip;
   white-space: nowrap;
-  padding: 10px;
+  padding: 0px;
 }
 
 

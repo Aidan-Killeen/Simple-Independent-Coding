@@ -39,23 +39,50 @@
             {% endfor %}
         </div>
     </div>
-    <form action="" method="get">
+    <form name="split_input" action="" method="get">
+        <input type="text" name="guess_comb" id="combo" hidden="on" autocapitalize="on" maxlength="5">
         {% for i in range(5) %}
-            <input type="text" name="guess_letter" id="{{i}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="this.next().focus()">
+            <input type="text" name="guess_letter" id="{{i}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="next_box()">
         {% endfor %}
-        <input type="submit" value="Submit">
-
+        
+        
     </form>
-    <form action="" method="get">
+    <button name="btn_submit" onclick="combined_submit()">Submit </button>
+    
+    <form name="simple_input" action="" method="get">
         <input type="textarea" name="guess" autocomplete="off" autocapitalize="on" maxlength="5" onkeyup="if(this.value.length == 5) this.blur()">
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" name="old_submit">
         <br> {{ output }}
 
     </form>
 
     <form action = "reset" method="get">
-        <input type="submit" value="Reset">
+        <input type="submit" value="Reset" name="reset">
     </form>
 
+<script type="text/javascript">
+    function combined_submit()
+    {
+        console.log("Combo Submit");
+        //let temp = document.getElementById("combo");
+        let temp = document.getElementsByName("split_input");
+        temp.submit();
+    }
+    function next_box(event)
+    {
+        console.log("Checking boxes");
+        //let currentBox = event.target.id;
+        //console.log("Current Box" + currentBox);
+        for (let index = 0; index < 5; index++) {
+            let temp = document.getElementById(index);
+            console.log(temp.value);
+            
+        }
+    }
+
+</script>
+
 </body>
+
+
 </html>
