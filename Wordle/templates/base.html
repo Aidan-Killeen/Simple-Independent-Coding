@@ -40,9 +40,8 @@
         </div>
     </div>
     <form name="split_input" action="" method="get">
-        <input type="text" name="guess_comb" id="combo" hidden="on" autocapitalize="on" maxlength="5">
         {% for i in range(5) %}
-            <input type="text" name="guess_letter" id="{{i}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="next_box()">
+            <input type="text" name="guess_letter" id="{{i}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="next_box(this.id)">
         {% endfor %}
         
         
@@ -50,8 +49,7 @@
     <button name="btn_submit" onclick="combined_submit()">Submit </button>
     
     <form name="simple_input" action="" method="get">
-        <input type="textarea" name="guess" autocomplete="off" autocapitalize="on" maxlength="5" onkeyup="if(this.value.length == 5) this.blur()">
-        <input type="submit" value="Submit" name="old_submit">
+        <input type="textarea" name="guess" autocomplete="off" autocapitalize="on" maxlength="5" hidden="on">
         <br> {{ output }}
 
     </form>
@@ -65,19 +63,36 @@
     {
         console.log("Combo Submit");
         //let temp = document.getElementById("combo");
-        let temp = document.getElementsByName("split_input");
+        let boxes = document.getElementsByName("guess_letter");
+        var text = "";
+        for(elem of boxes)
+            text += elem.value
+        console.log(text);
+
+        var temp = document.forms["simple_input"];
+        console.log(temp);
+        temp["guess"].value = text;
+        //var temp = document.createElement("FORM");
+        //temp.name = "test";
+        
         temp.submit();
     }
-    function next_box(event)
+    function next_box(current_id)
     {
-        console.log("Checking boxes");
-        //let currentBox = event.target.id;
-        //console.log("Current Box" + currentBox);
-        for (let index = 0; index < 5; index++) {
+
+        console.log("Current Box" + current_id);
+        
+        for (let index = current_id; index < 5; index++) {
             let temp = document.getElementById(index);
-            console.log(temp.value);
+            if(temp.value == "")
+            {
+                temp.focus();
+                break;
+            }
+                
             
         }
+        
     }
 
 </script>
