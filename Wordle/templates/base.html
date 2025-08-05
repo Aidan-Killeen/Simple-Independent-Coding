@@ -14,7 +14,12 @@
             {% for color_row in colors %}
                 {% set rowloop = loop.index0 %}
                 {% for color in color_row %}
-                    <square correct='{{color}}'>{{words[rowloop][loop.index0]}}</square>
+                    {% set contents = words[rowloop][loop.index0] %}
+                    {% if rowloop == guess_no %}
+                        {% set contents = loop.index0 %}
+                    {% endif %}
+
+                    <square correct='{{color}}'>{{contents}}</square>
                 {% endfor %}
             {% endfor %}
             
@@ -47,10 +52,11 @@
         
     </form>
     <button name="btn_submit" onclick="combined_submit()">Submit </button>
+    <br> {{ output }}
     
     <form name="simple_input" action="" method="get">
         <input type="textarea" name="guess" autocomplete="off" autocapitalize="on" maxlength="5" hidden="on">
-        <br> {{ output }}
+        
 
     </form>
 

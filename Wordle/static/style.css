@@ -1,16 +1,3 @@
-input[name="guess"]{
-  height: 100px;
-  width: 500px;
-  font-size: 30px;
-  text-indent: 35px;
-  letter-spacing: 85px;
-  font-family: monaco, monospace;
-  text-transform:uppercase;
-  background: transparent;
-  text-overflow: clip;
-  white-space: nowrap;
-}
-
 input[name="guess_letter"]{
   height: 100px;
   width: 100px;
