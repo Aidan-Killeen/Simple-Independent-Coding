@@ -14,12 +14,12 @@
             {% for color_row in colors %}
                 {% set rowloop = loop.index0 %}
                 {% for color in color_row %}
-                    {% set contents = words[rowloop][loop.index0] %}
-                    {% if rowloop == guess_no %}
-                        {% set contents = loop.index0 %}
+                    {% if rowloop == guess_no and not won%}
+                        <input type="text" name="guess_letter" id="{{loop.index0}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="next_box(this.id)">
+                    {% else %}
+                        <square correct='{{color}}'>{{words[rowloop][loop.index0]}}</square> 
                     {% endif %}
 
-                    <square correct='{{color}}'>{{contents}}</square>
                 {% endfor %}
             {% endfor %}
             
@@ -44,13 +44,7 @@
             {% endfor %}
         </div>
     </div>
-    <form name="split_input" action="" method="get">
-        {% for i in range(5) %}
-            <input type="text" name="guess_letter" id="{{i}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="next_box(this.id)">
-        {% endfor %}
-        
-        
-    </form>
+
     <button name="btn_submit" onclick="combined_submit()">Submit </button>
     <br> {{ output }}
     

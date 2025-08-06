@@ -33,12 +33,10 @@ def make_guess(guess: str, target: str, prev_guesses: Dict):
 
 #Todo
 # Adjust Layout - have elements next to each other
-# Make enter auto submit form
-# Adjust form to be part of wordle grid
+# Make enter auto submit form, add backspace
 # Decrease latency switching between boxes
 # block submit unless all letters filled
 # Adjust Make_guess to automatically add parameters to prev_guesses (will reduce amount of outputs)
-# Instead of default search bar, change to have text entry happen within grid
 # Randomisation - retrieve json using random date from 19/06/2021
 
 current = datetime.today().strftime('%Y-%m-%d')
@@ -82,13 +80,15 @@ def game():
             valid = True
             if solved:
                 output = "Correct!"
+                won = True
             words[guess_no] = guess.upper()
             prev_guesses["colors"][guess_no] = out
             guess_no += 1
 
     resp = make_response(render_template(
         "base.html", 
-        output=output, 
+        output=output,
+        won=won, 
         words=words,
         colors=prev_guesses["colors"],
         letter_list=letter_list,
