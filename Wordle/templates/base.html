@@ -15,7 +15,7 @@
                 {% set rowloop = loop.index0 %}
                 {% for color in color_row %}
                     {% if rowloop == guess_no and not won%}
-                        <input type="text" name="guess_letter" id="{{loop.index0}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeyup="next_box(this.id)">
+                        <input type="text" name="guess_letter" id="{{loop.index0}}" autocomplete="off" autocapitalize="on" maxlength="1" onkeydown="key_check(event, this.id)" onchange="next_box(this.id)">
                     {% else %}
                         <square correct='{{color}}'>{{words[rowloop][loop.index0]}}</square> 
                     {% endif %}
@@ -77,22 +77,50 @@
         
         temp.submit();
     }
-    function next_box(current_id)
+    function key_check(event, current_id)
     {
-
+        event.preventDefault();
         console.log("Current Box" + current_id);
-        
-        for (let index = current_id; index < 5; index++) {
+        let key_val = document.getElementById(current_id).value;
+        if(event.key=="Backspace")
+        {
+            if (key_val=="")
+            {
+                let box = document.getElementById(current_id-1);
+                box.value = "";
+                box.focus();
+            }
+            else
+                document.getElementById(current_id).value = "";  
+            
+        }
+        else if(event.key=="Escape")
+            console.log("Submit");
+        else if(event.key.length==1 && event.key != "Space")
+        {
+            console.log("Key: " + event.key);
+            document.getElementById(current_id).value=event.key;
+            let temp = document.getElementById(parseInt(current_id)+1);
+            console.log("New Index: " + parseInt(current_id)+1)
+            temp.focus();
+        }
+   
+            
+    }
+    function next_box(id)
+    {
+        console.log("Current Box" + id);
+        for (let index = id; index < 5; index++) 
+        {
             let temp = document.getElementById(index);
             if(temp.value == "")
             {
                 temp.focus();
                 break;
             }
-                
-            
         }
         
+
     }
 
 </script>
