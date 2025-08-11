@@ -44,8 +44,6 @@
             {% endfor %}
         </div>
     </div>
-
-    <button name="btn_submit" onclick="combined_submit()">Submit </button>
     <br> {{ output }}
     
     <form name="simple_input" action="" method="get">
@@ -94,8 +92,8 @@
                 document.getElementById(current_id).value = "";  
             
         }
-        else if(event.key=="Escape")
-            console.log("Submit");
+        else if(event.key=="Enter")
+            combined_submit();
         else if(event.key.length==1 && event.key != "Space")
         {
             console.log("Key: " + event.key);
