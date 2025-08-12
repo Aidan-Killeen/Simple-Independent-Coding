@@ -94,6 +94,11 @@
         }
         else if(event.key=="Enter")
             combined_submit();
+        else if(event.key =="Tab")
+            if (!event.shiftKey)
+                document.getElementById(parseInt(current_id)+1).focus();
+            else
+                document.getElementById(parseInt(current_id)-1).focus();
         else if(event.key.length==1 && event.key != "Space")
         {
             console.log("Key: " + event.key);

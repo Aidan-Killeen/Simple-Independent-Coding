@@ -56,27 +56,30 @@ def game():
             "guess_no": 0,
             "green_l":[],
             "yellow_l":[],
-            "gray_l":[]
+            "gray_l":[],
+            "target":target
             
             }
+        
+    solution = prev_guesses["target"]
     print(prev_guesses)
     guess_no = prev_guesses["guess_no"]
     words = prev_guesses["words"]
 
     print("Prev:", words)
-    won = target.upper() in words
+    won = solution.upper() in words
     valid = False
     guess = request.args.get("guess", "")
     output = ""
     if won:
         output = "You already won!"
     elif guess and guess.upper() not in words:
-        if len(guess) != len(target):
+        if len(guess) != len(solution):
             output = "Error: Length mismatch"
         elif guess_no >= max_guesses:
             output = "You have run out of guesses"
         else:
-            out, solved = make_guess(guess, target, prev_guesses)
+            out, solved = make_guess(guess, solution, prev_guesses)
             valid = True
             if solved:
                 output = "Correct!"
