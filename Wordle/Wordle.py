@@ -33,9 +33,7 @@ def make_guess(guess: str, target: str, prev_guesses: Dict):
 
 #Todo
 # Adjust Layout - have elements next to each other
-# Make enter auto submit form, add backspace
-# Decrease latency switching between boxes
-# block submit unless all letters filled
+# block submit unless all letters filled - with valid potential letters
 # Adjust Make_guess to automatically add parameters to prev_guesses (will reduce amount of outputs)
 # Randomisation - retrieve json using random date from 19/06/2021
 
@@ -43,7 +41,7 @@ current = datetime.today().strftime('%Y-%m-%d')
 target = requests.get('https://www.nytimes.com/svc/wordle/v2/'+current+'.json').json()["solution"]
 print(target)
 max_guesses = 6
-letter_list = "qwertyuiop asdfghjkl zxcvbnm"
+letter_list = "qwertyuiopasdfghjklzxcvbnm"
 
 @app.route("/")
 def game():
@@ -78,6 +76,8 @@ def game():
             output = "Error: Length mismatch"
         elif guess_no >= max_guesses:
             output = "You have run out of guesses"
+        elif not guess.isalpha():
+            output = "Invalid Guess: Not using alphabet char"
         else:
             out, solved = make_guess(guess, solution, prev_guesses)
             valid = True

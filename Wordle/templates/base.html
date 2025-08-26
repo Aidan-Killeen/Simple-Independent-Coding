@@ -26,21 +26,20 @@
         </div>
         <div class="letters">
             {% for letter in letter_list %}
-                {% if letter in " "%}
+                {% if letter in "az"%}
                     <br>
-                
-                {% else %}
-                    {% if letter in green_list %}
-                        <div guessed="green">
-                    {% elif letter in yellow_list %}
-                        <div guessed="yellow">
-                    {% elif letter in gray_list %}
-                        <div guessed="gray">
-                    {% else %}
-                        <div>
-                    {% endif %}
-                    {{letter}}</div>
                 {% endif %}
+                
+                {% if letter in green_list %}
+                    <div guessed="green">
+                {% elif letter in yellow_list %}
+                    <div guessed="yellow">
+                {% elif letter in gray_list %}
+                    <div guessed="gray">
+                {% else %}
+                    <div>
+                {% endif %}
+                {{letter}}</div>
             {% endfor %}
         </div>
     </div>
