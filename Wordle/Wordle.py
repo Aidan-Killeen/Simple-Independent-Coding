@@ -7,6 +7,10 @@ from typing import Dict
 app = Flask(__name__)
 
 def make_guess(guess: str, target: str, prev_guesses: Dict):
+    """
+    Function to check if each letter in a guess is in the solution, and if it is in the right place
+    
+    """
     output = ["gray"] * len(target)
     solved = True
     yellow = set(prev_guesses["yellow_l"])
@@ -45,6 +49,7 @@ letter_list = "qwertyuiopasdfghjklzxcvbnm"
 
 @app.route("/")
 def game():
+    # Load details from prior guesses - or make blank cookie to store future information
     if 'prev_guesses' in request.cookies:
         prev_guesses = json.loads(request.cookies.get('prev_guesses'))
     else:
@@ -60,11 +65,13 @@ def game():
             }
         
     solution = prev_guesses["target"]
-    print(prev_guesses)
+    #print(prev_guesses)
     guess_no = prev_guesses["guess_no"]
     words = prev_guesses["words"]
 
-    print("Prev:", words)
+    #print("Prev:", words)
+
+    #Make a guess - cannot make one if game is already won
     won = solution.upper() in words
     valid = False
     guess = request.args.get("guess", "")
@@ -102,6 +109,8 @@ def game():
     
     prev_guesses["guess_no"] = guess_no
     prev_guesses["words"] = words
+
+    # Update the cookie - only if valid guess was made
     if valid:
         print(prev_guesses)
         resp.set_cookie('prev_guesses', json.dumps(prev_guesses))
@@ -109,6 +118,10 @@ def game():
 
 @app.route("/reset")
 def reset():
+    """
+    Function that deletes the cookie of the currently active game, and redirects to the url for the game function.
+
+    """
     resp = make_response(redirect(url_for('game')))
     resp.delete_cookie('prev_guesses')
     return resp
